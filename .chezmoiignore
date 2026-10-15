@@ -1,0 +1,7 @@
+# Everything in this repo is a chezmoi source: dot_X maps to ~/.X.
+# Ignore repo meta files so `chezmoi apply` never creates ~/LICENSE etc.
+# Last matching pattern wins (gitignore semantics).
+*
+!.agents
+!.config
+!.opencodereview
