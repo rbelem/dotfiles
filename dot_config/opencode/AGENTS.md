@@ -21,7 +21,9 @@ When spinning multiple parallel lanes that will edit code
 (`spawn_workspace`), never raw `git worktree add`. Plugin-registered lanes
 get inventory tracking (`list_worktrees`), session attach/refuse
 protection, and cross-session visibility; bare git worktrees are invisible
-to every other session and race-prone.
+to every other session and race-prone. On spawn failure recover through
+the plugin (`list_worktrees`); leave commit/stage breadcrumbs in a lane
+before handoff so the next session grounds on disk, not the registry.
 
 ## Coding Standards
 
