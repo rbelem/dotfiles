@@ -278,7 +278,7 @@
   },
   "tool_output": {
     "max_lines": 400,
-    "max_bytes": 16000
+    "max_bytes": 32768
   },
   // Relative to the project checkout, so a `cow` clone lands on the source's own
   // filesystem. opencode2's default is $XDG_DATA_HOME/worktree/<project>, which
