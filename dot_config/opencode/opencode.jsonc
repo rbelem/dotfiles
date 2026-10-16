@@ -209,8 +209,12 @@
     // runtime whose flush() the model.catalog bootstrap awaits → every
     // CLI/TUI command failed with "Model catalog initialization timed out".
     // ponytail: local V2 port at plugins/ponytail
-    // model-announcer / dcg-guard / agentmemory-capture / autolearn: local V2
-    //   ports, direct files in plugins/ (auto-discovered)
+    // agentmemory-capture and autolearn were retired 2026-10-16. Both engines
+    //   were dead and upstreams exist. The devbox.d/agentmemory entry is gone.
+    //   dcg-guard.js is upstream generated. It comes from `dcg install
+    //   --opencode`, so do not edit it. The hand-written dcg-guard.ts was
+    //   deleted 2026-10-16. The generated copy loads and the local one failed.
+    //   model-announcer was retired 2026-10-16. Native v2 covers it.
     // deferred (no V2 support upstream): @slkiser/opencode-quota (TUI-heavy),
     //   @tarquinen/opencode-smart-title (superseded by native title agent)
     // opencode-todolist (rbelem fork, dogfood): local tree, loads dist/ via
