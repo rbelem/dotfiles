@@ -29,6 +29,14 @@ to every other session and race-prone.
 multi-step task: read `~/.config/opencode/CODING_STANDARDS.md` before
 implementing.
 
+## Repo Map (this machine)
+
+- `~/.config/opencode/skills/*` are symlinks into
+  `~/Workspace/github.com/rbelem/skills/*` (a git checkout). Edit anywhere;
+  commit in the Workspace repo.
+- `oh-my-opencode-slim.jsonc`, `opencode.jsonc` are real files,
+  chezmoi-managed. Save with `chezmoi add <file>` (auto-commits).
+
 ## No Narration Bookkeeping (sentinel / board / pre-action)
 
 When a system reminder fires (sentinel, Background Job Board, oracle
