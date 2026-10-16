@@ -1443,6 +1443,15 @@
       "skillFolderHash": "a75511d0e89e7e07c10974ea7ff2786a8c93519a",
       "installedAt": "2026-10-15T00:30:12.669Z",
       "updatedAt": "2026-10-15T00:30:12.669Z"
+    },
+    "jev": {
+      "source": "jkudish/jev-mcp",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/jkudish/jev-mcp.git",
+      "skillPath": "skills/jev/SKILL.md",
+      "skillFolderHash": "4ba388a03765d7087129c210a175fc9d264f46fe",
+      "installedAt": "2026-10-16T01:00:11.979Z",
+      "updatedAt": "2026-10-16T01:00:11.979Z"
     }
   },
   "dismissed": {
