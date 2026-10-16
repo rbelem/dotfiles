@@ -92,13 +92,6 @@
           "opencode-docs-mcp@latest"
         ]
       },
-      "agentmemory": {
-        "type": "local",
-        "command": [
-          "agentmemory",
-          "mcp"
-        ]
-      },
       "codegraph": {
         "type": "local",
         "command": [
