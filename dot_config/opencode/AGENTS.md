@@ -31,6 +31,20 @@ before handoff so the next session grounds on disk, not the registry.
 multi-step task: read `~/.config/opencode/CODING_STANDARDS.md` before
 implementing.
 
+## Commit Identity (never override)
+
+Never pass `-c user.name=` / `-c user.email=` to `git`, and never set
+`GIT_AUTHOR_*` / `GIT_COMMITTER_*` in a shell command. Commit under the
+identity the repo already carries (`git config user.email`). A GitHub
+no-reply address is safe only when it is this account's own:
+`Rodrigo Belem <856570+rbelem@users.noreply.github.com>`. Any other
+`@users.noreply.github.com` string — e.g. `rodrigo@users.noreply.github.com`
+— belongs to whoever owns that login, so GitHub credits *their* account.
+That is how `github.com/rodrigo` appeared as a second committer on
+`rbelem/nau` (17 commits, 2026-09-22, an overnight agent run). The
+`identity-guard` plugin blocks the pattern; `IDENTITY_GUARD_BYPASS=1` is the
+deliberate escape hatch for throwaway-repo tests.
+
 ## Repo Map (this machine)
 
 - `~/.config/opencode/skills/*` are symlinks into
