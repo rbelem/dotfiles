@@ -104,6 +104,25 @@
           "execution": 600000
         }
       },
+      // OpenDesign (nexu-io/open-design), from devbox.d/open-design. The daemon
+      // must be running: start it with `open-design` in a terminal, else every
+      // tool answers "daemon unreachable". Uses `open-design`, not `od`, because
+      // coreutils ships an octal-dump `od` that can win on PATH.
+      "open-design": {
+        "type": "local",
+        "command": [
+          "open-design",
+          "mcp",
+          "--daemon-url",
+          "http://127.0.0.1:7456"
+        ],
+        "enabled": true,
+        // get_run polls until a generation run (5-30 min) settles.
+        "timeout": {
+          "catalog": 120000,
+          "execution": 1800000
+        }
+      },
       "zvec_grep": {
         "type": "local",
         "command": [
