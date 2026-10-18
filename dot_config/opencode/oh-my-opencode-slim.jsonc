@@ -1,10 +1,7 @@
 {
-  // Model fallback runs in oh-my-opencode-slim array chains, not in Bifrost.
-  // Native providers lack xhigh/medium efforts, so xhigh reads high and
-  // medium reads high. Every id and variant below passed a live probe.
   "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/master/oh-my-opencode-slim.schema.json",
   "webfetch": {
-    "enabled": false
+    "enabled": true
   },
   "disabled_agents": [],
   "companion": {
@@ -12,154 +9,15 @@
     "position": "bottom-left",
     "size": "small"
   },
-  // "budget" is the Go-only preset (left-2026-10-15 job → OpenCode Go is the
-  // only paid route). Every entry below is opencode-go. Seat rationale and
-  // per-model Go caps live in skills/benchmark-model-preset (2026-10-15
-  // snapshot + SKILL.md "Budget preset" section). Probe-verified 2026-10-15:
-  // every model#variant string here resolved end-to-end.
-  // Policy update 2026-10-15 (same day): open-weight-only restriction and
-  // no-data-training restriction LIFTED (bifrost OR allowlist restored with
-  // Claude/GPT/Gemini/Grok/Muse/Mercury). Orchestrator + fixer run Muse Spark
-  // 1.3 Contributor — the data-use tier ($0.10/$0.20, cache-read $0.002,
-  // $60/mo cap = ~226.6K req/mo vs GLM-Flash's ~31.6K; 368M completed
-  // sessions on OpenCode, #2 by tokens). Free previews stay on high-volume
-  // read-only seats (explorer, librarian) so a preview retirement degrades
-  // to the chain, never to a broken seat.
-  "preset": "budget",
+  "preset": "default",
   "presets": {
     "default": {
       "orchestrator": {
         "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "high",
-        "skills": [
-          "*",
-          "!design-taste-frontend",
-          "!high-end-visual-design",
-          "!minimalist-ui",
-          "!industrial-brutalist-ui",
-          "!mobile-android-design",
-          "!brandkit",
-          "!redesign-existing-projects",
-          "!imagegen-frontend-web",
-          "!imagegen-frontend-mobile",
-          "!gpt-taste",
-          "!stitch-design-taste",
-          "!image-to-code",
-          "!prototype"
-        ],
-        "mcps": [
-          "*",
-          "!chrome-devtools",
-          "!browsermcp",
-          "!firecrawl-mcp",
-          "!context7",
-          "!gh_grep",
-          "!opencode-docs",
-          "!websearch"
-        ]
-      },
-      "oracle": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          "opencode-go/kimi-k3"
-        ],
-        "variant": "max",
-        "skills": [
-          "simplify",
-          "code-review",
-          "diagnosing-bugs",
-          "codebase-design",
-          "zoom-out",
-          "domain-modeling",
-          "grill-me",
-          "improve-codebase-architecture",
-          "verification-planning"
-        ],
-        "mcps": ["codegraph"]
-      },
-      "librarian": {
-        "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "low",
-        "skills": ["research"],
-        "mcps": ["context7", "gh_grep", "firecrawl-mcp", "opencode-docs"]
-      },
-      "explorer": {
-        "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "high",
-        "skills": [],
-        "mcps": ["codegraph"]
-      },
-      "designer": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          "opencode-go/kimi-k3"
-        ],
-        "variant": "max",
-        "skills": [
-          "agent-browser",
-          "mobile-android-design",
-          "design-taste-frontend",
-          "high-end-visual-design",
-          "gpt-taste",
-          "image-to-code",
-          "stitch-design-taste",
-          "prototype"
-        ],
-        "mcps": []
-      },
-      "fixer": {
-        "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "high",
-        "skills": [
-          "git-commit",
-          "use-devbox",
-          "full-output-enforcement",
-          "graphify",
-          "clonedeps",
-          "greploop",
-          "tdd",
-          "verification-planning"
-        ],
-        "mcps": ["codegraph"]
-      },
-      "observer": {
-        "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "high",
-        "skills": [],
-        "mcps": []
-      },
-      "council": {
-        "model": [
-          "zai-coding-plan/glm-5.3-flash",
-          "opencode-go/glm-5.3-flash"
-        ],
-        "variant": "high"
-      }
-    },
-    "budget": {
-      "extends": "default",
-      "orchestrator": {
-        "model": [
+          { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" },
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" },
-          { "id": "opencode-go/muse-spark-1.2-contributor", "variant": "high" },
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" },
-          "opencode-go/mimo-v2.6-flash",
-          { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" }
+          "opencode-go/mimo-v2.6-flash"
         ],
         "variant": "high"
       },
@@ -198,6 +56,7 @@
       },
       "fixer": {
         "model": [
+          { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" },
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" },
           { "id": "opencode-go/muse-spark-1.2-contributor", "variant": "high" },
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" },
@@ -228,63 +87,11 @@
         ],
         "variant": "low"
       }
-    },
-    "privacy": {
-      "extends": "default",
-      "orchestrator": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "high"
-      },
-      "librarian": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          "opencode-go/kimi-k3"
-        ]
-      },
-      "explorer": {
-        "model": [
-          "kimi-code-plan-global/k3-256k",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "low"
-      },
-      "designer": {
-        "model": [
-          "kimi-code-plan-global/k3",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "high"
-      },
-      "fixer": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "high"
-      },
-      "observer": {
-        "model": [
-          "kimi-code-plan-global/k3-256k",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "high"
-      },
-      "council": {
-        "model": [
-          "kimi-code-plan-global/kimi-for-coding",
-          { "id": "opencode-go/kimi-k3", "variant": "max" }
-        ],
-        "variant": "high"
-      }
     }
   },
   "agents": {
     "fast-generic": {
       "model": [
-        "zai-coding-plan/glm-5.3-flash",
         "opencode-go/glm-5.3-flash"
       ],
       "variant": "low",
@@ -297,37 +104,15 @@
   "multiplexer": {
     "type": "herdr",
     "layout": "main-vertical",
-    "main_pane_size": 60,
+    "main_pane_size": 70,
     "viewer": "mini"
   },
   "council": {
-    // Councillors follow default_preset globally (not the model preset), so
-    // this is flipped to "budget" together with preset above. Switching the
-    // model preset back to "default"/"privacy" should also flip this back.
-    "default_preset": "budget",
+    "default_preset": "default",
     "presets": {
-      "budget": {
-        "alpha": {
-          "model": ["opencode-go/kimi-k3", "opencode-go/glm-5.3"],
-          "variant": "max"
-        },
-        "beta": {
-          "model": ["opencode-go/glm-5.3"],
-          "variant": "max"
-        },
-        "gamma": {
-          "model": ["opencode-go/qwen3.8-max"],
-          "variant": "xhigh"
-        },
-        "delta": {
-          "model": ["opencode-go/mimo-v2.6-pro"]
-        }
-      },
-      // Go-only (2026-10-15): legacy kimi-plan / zai / OpenRouter member
-      // chains removed per budget call; same roster as `budget`.
       "default": {
         "alpha": {
-          "model": ["opencode-go/kimi-k3", "opencode-go/glm-5.3"],
+          "model": ["opencode-go/kimi-k3"],
           "variant": "max"
         },
         "beta": {
