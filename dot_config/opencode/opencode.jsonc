@@ -90,7 +90,8 @@
           "bunx",
           "-y",
           "opencode-docs-mcp@latest"
-        ]
+        ],
+        "enabled": false,
       },
       "codegraph": {
         "type": "local",
