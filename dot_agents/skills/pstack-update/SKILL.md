@@ -39,6 +39,7 @@ description: Update the rbelem/skills pstack fork (OpenCode port of poteto's pst
    | `/deslop` (cursor-team-kit) | `/stop-slop` |
    | `control-cli` / `control-ui` | direct CLI runs / `agent-browser` skill |
    | `agent-transcripts/` workspace dir | opencode session store (query via `opencode` session commands, not filesystem) |
+   | upstream model slugs (`claude-*` / `grok-*` / `composer-*` families, `-fast` speed tiers) | oh-my-opencode-slim agents (`fixer`, `oracle`, `explorer`, `investigator`) for code/judgment/recon/evidence, with no hardcoded model defaults; optional overrides via the `/setup-pstack` rule, see `pstack/README.md` → Agent seats and model routing |
 
    `skills/unslop/SKILL.md` must keep its extra frontmatter:
 
@@ -59,10 +60,10 @@ description: Update the rbelem/skills pstack fork (OpenCode port of poteto's pst
    for f in */SKILL.md; do d=$(dirname "$f"); n=$(grep -m1 "^name:" "$f" | sed 's/^name: *//; s/"//g'); [ "$d" != "$n" ] && echo "$f -> '$n'"; done
    ```
 
-6. **Verify zero Cursor residue** (must return nothing):
+6. **Verify zero Cursor, retired-slug, and retired-delegate residue** (the fork's `README.md` documents the substitutions and is excluded; must return nothing else):
 
    ```bash
-   grep -rn "\.cursor/\|AskQuestion\|cursor-team-kit\|deslop" --include="*.md" ~/Workspace/github.com/rbelem/skills/pstack/
+   grep -rn "\.cursor/\|AskQuestion\|cursor-team-kit\|deslop\|grok-\|claude-\|cursor-grok\|composer-\|subagent_type: general" --include="*.md" --exclude=README.md ~/Workspace/github.com/rbelem/skills/pstack/
    ```
 
 7. **Commit + push the fork repo** — stage ONLY `pstack/` and `pstack-update/`; the repo carries unrelated uncommitted work (benchmark-model-preset). Never `git add -A`. Do not amend/rebase.
@@ -77,6 +78,7 @@ description: Update the rbelem/skills pstack fork (OpenCode port of poteto's pst
 - Mechanical regexes can't recover the fork's hand-written adaptation phrasings. Before copying over, extract the old fork's phrasing from `git show HEAD:pstack/...` for: `agent-transcripts/`/`~/.cursor/projects` lines, `control-cli`/`control-ui` lines, `deslop`/`cursor-team-kit` lines, `create-skill` lines, `Cursor cloud agent`/dashboard lines, `/loop` lines. Re-apply them verbatim in a second pass, then residue-grep the `.md` files (leave `api2.cursor.sh` webhook URL in make-bot-ui and `environment: "cloud"` in swarm + worktree-audit.sh — fork precedent).
 - Prefer the patch flow over wholesale `cp`: in a fresh clone, find the fork's base commit (`git log --until=<port-date> -- pstack`; upstream has no tags, version lives in `pstack/.cursor-plugin/plugin.json`), write `git diff <base>..HEAD -- pstack/skills pstack/agents` to a patch, and `git apply --reject` it in the fork repo. Cleanly-applied hunks land untouched and the reject set is exactly the substituted files; resolve each by overwriting with the sed-substituted upstream version, then re-applying the fork phrasings line-by-line using `git show HEAD:` (old) vs the substituted file (new) as a resid diff. Note dcg blocks `git checkout`/`git restore` — never compound the apply; verify totals instead of resetting.
 - Upstream renames tokens between versions: v0.15.x renamed the rules file `pstack-models.md` → `pstack-models.mdc` and added `disable-model-invocation: true` frontmatter. After porting, also sweep for NEW upstream token forms (`.mdc`, title-case `name:`) and fresh "Cursor" product references (e.g. "If Cursor also exposes"), not just the substitution table's old forms.
+- After a re-port, restore the fork's spawn routing. Upstream ships Cursor model slugs and a `general`-style delegate in `poteto-mode` (both defaults plus the hardest-model mention), every playbook's `(default <slug>)`, the `how`, `why`, `swarm`, `architect`, `arena`, `interrogate`, and `reflect` spawn lines, and `setup-pstack`'s budget labels and example table. Re-apply per `pstack/README.md` → Agent seats and model routing: playbook code delegates and panel runners/workers spawn `fixer`, judges/reviewers and judgment prose spawn `oracle`, reconnaissance spawns `explorer`, and the `why`/`reflect` evidence roles spawn `investigator`. Keep spawns provider-generic: every spawn omits `model` unless the user's `pstack-models.md` override sets one. Drop `-fast`/speed wording in favor of the `#variant` mechanics, and run the step 6 grep (it includes the retired slugs).
 - `skills update -g -y` cannot apply updates for `pstack/skills/*` entries (v1.6.0): its apply phase re-clones with shallow discovery, finds only root-level skills, and reports "No matching skills found". Reinstall per skill instead: `skills add https://github.com/rbelem/skills.git --skill <name> --full-depth -g -y < /dev/null`. Redirect stdin or the CLI's prompt machinery eats the rest of a `while read` list. If a per-skill add exits non-zero citing PromptScript, the store update still landed; verify with `diff -rq` against the fork rather than trusting the exit code.
 
 ## Gotchas
