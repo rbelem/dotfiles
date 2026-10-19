@@ -28,6 +28,14 @@ feature), and the API is origin-trial gated. Probed headless and headed with
 Local verification therefore runs against the polyfill:
 `https://raw.githubusercontent.com/GoogleChromeLabs/webmcp-tools/main/demos/shared/webmcp-polyfill.js`
 
+Recipe (verified 2026-10-19, Chromium 152 headless through browser-harness):
+load the polyfill in the dev page, serve the app, attach a CDP browser, then
+read the page with the harness `js` helper wrapped in an async IIFE:
+`js("(async () => JSON.stringify((await document.modelContext.getTools()).map(t => t.name)))()")`.
+The browser-harness MCP calls this `browser_js`; the chrome-devtools MCP
+calls it `evaluate_script` and takes a function instead of a raw expression.
+The `webmcp` skill holds the full recipe.
+
 ## Types
 
 `npm i -D webmcp-types` (0.1.10, TypeScript 5.0+). Wire with
