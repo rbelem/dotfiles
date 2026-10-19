@@ -84,13 +84,13 @@
       "permission": {
         "bash": {
           "*": "allow",
-          "git push --force*": "deny",
-          "git push -f*": "deny",
-          "git reset --hard*": "deny",
-          "git clean -f*": "deny",
-          "git clean -xdf*": "deny",
-          "git branch -D*": "deny",
-          "git push --force-with-lease*": "allow"
+          "*push --force*": "deny",
+          "*push -f*": "deny",
+          "*push*+*": "deny",
+          "*reset --hard*": "deny",
+          "*git clean*": "deny",
+          "*branch -D*": "deny",
+          "*push --force-with-lease*": "allow"
         }
       },
       "skills": [],
@@ -122,6 +122,7 @@
         "webfetch": "allow",
         "websearch": "allow",
         "external_directory": "allow",
+        "question": "allow",
         "edit": "deny",
         "write": "deny",
         "apply_patch": "deny",
@@ -129,14 +130,17 @@
         "task": "deny",
         "bash": {
           "*": "allow",
-          "git commit*": "deny",
-          "git push*": "deny",
-          "git reset*": "deny",
-          "git clean*": "deny",
-          "git checkout*": "deny",
-          "git branch -D*": "deny",
+          "*git commit*": "deny",
+          "*push *": "deny",
+          "*push*+*": "deny",
+          "*reset --hard*": "deny",
+          "*git clean*": "deny",
+          "*git checkout*": "deny",
+          "*branch -D*": "deny",
           "rm *": "deny",
-          "mv *": "deny"
+          "mv *": "deny",
+          "*rm -rf*": "deny",
+          "*sudo *": "deny"
         }
       },
       "skills": [],
