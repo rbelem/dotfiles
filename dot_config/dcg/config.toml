@@ -1,0 +1,4 @@
+# Relaxes only the high/medium rules. `rm -rf ~/work` still hard-denies,
+# because core.filesystem:rm-rf-root-home is critical.
+[policy.packs]
+"core.filesystem" = "warn"
