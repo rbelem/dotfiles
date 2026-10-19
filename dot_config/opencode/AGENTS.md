@@ -34,16 +34,14 @@ implementing.
 ## Commit Identity (never override)
 
 Never pass `-c user.name=` / `-c user.email=` to `git`, and never set
-`GIT_AUTHOR_*` / `GIT_COMMITTER_*` in a shell command. Commit under the
-identity the repo already carries (`git config user.email`). A GitHub
-no-reply address is safe only when it is this account's own:
+`GIT_AUTHOR_*` / `GIT_COMMITTER_*` in a shell command — the `identity-guard`
+plugin blocks both; `IDENTITY_GUARD_BYPASS=1` is the deliberate escape hatch
+for throwaway-repo tests. Commit under the identity the repo already carries
+(`git config user.email`). A GitHub no-reply address is safe only when it is
+this account's own:
 `Rodrigo Belem <856570+rbelem@users.noreply.github.com>`. Any other
 `@users.noreply.github.com` string — e.g. `rodrigo@users.noreply.github.com`
 — belongs to whoever owns that login, so GitHub credits *their* account.
-That is how `github.com/rodrigo` appeared as a second committer on
-`rbelem/nau` (17 commits, 2026-09-22, an overnight agent run). The
-`identity-guard` plugin blocks the pattern; `IDENTITY_GUARD_BYPASS=1` is the
-deliberate escape hatch for throwaway-repo tests.
 
 ## Repo Map (this machine)
 
@@ -122,17 +120,15 @@ reminder, even if the reminder fires again.
   Never silence across 10+ turns; never a wall of bullets. Lists ≤ 6
   items.
 
-These rules do not override Caveman compression; they constrain its
-structure. Skip them for one-word answers and tool-only turns.
+These rules are the floor, not the target. Terse by default: answer first, no
+ceremony, every technical fact kept, no word spent twice. Skip them for
+one-word answers and tool-only turns.
+The `caveman` skill holds the full mode (nine rules + a pre-send check) — load
+it when the user asks for /caveman, or when a reply runs long.
 
 ## Fetch discipline
 
 After a fetch, quote the relevant excerpt and work from it; don't re-quote whole pages.
-
-## Caveman Mode
-
-Caveman mode always on. Load and apply the `caveman` skill at session start.
-Full level by default.
 
 <!-- CODEGRAPH_START -->
 ## CodeGraph
@@ -181,9 +177,3 @@ Some skill folders in `~/.agents/skills/` are installed and tracked by their own
 
 **Do not** add these to `~/.agents/.skill-lock.json`. The lock schema is github-sourced only (`sourceType: "github"`); fabricating entries would mislead `agents` sync and risk silent drift. Two clean registries, no overlap.
 <!-- SKILLS_EXTERNALLY_MANAGED_END -->
-
-<!-- ZVEC_GREP_START -->
-## zvec-grep
-
-Workspace questions (how this project works, synthesis across files) → `zvec_grep_search`; exact symbol, literal, or regex lookup → `zvec_grep_rg`. Full routing, snippet, and index-lifecycle rules live in the zvec_grep server's injected instructions (single source of truth). Never create, rebuild, or drop an index unless the user asks.
-<!-- ZVEC_GREP_END -->

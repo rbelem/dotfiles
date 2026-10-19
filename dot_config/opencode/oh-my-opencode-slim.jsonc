@@ -12,7 +12,7 @@
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" },
           { "id": "opencode-go/mimo-v2.6-flash", "variant": "default" }
         ],
-        "variant": "high"
+        "variant": "max"
       },
       "oracle": {
         "model": [
