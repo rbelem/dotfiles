@@ -83,14 +83,14 @@
       "orchestratorPrompt": "Delegate to @fast-generic for routine mechanical command work: git status/diff/log reconnaissance, normal commit preparation, creating commits, pushing commits, and no-edit command validation such as lint, typecheck, static verification, tests, builds, or package-manager equivalents. Ask it to inspect diffs before committing, stage only intended files, avoid secrets, preserve repository commit-message style, and report final commit hashes or push results. Do not use it for code edits, design work, architecture, debugging strategy, docs research, or destructive git history operations such as amend, rebase, reset --hard, clean, force-push, or deleting branches unless the user explicitly requested that exact operation.",
       "permission": {
         "bash": {
+          "*": "allow",
           "git push --force*": "deny",
           "git push -f*": "deny",
           "git reset --hard*": "deny",
           "git clean -f*": "deny",
           "git clean -xdf*": "deny",
           "git branch -D*": "deny",
-          "git push --force-with-lease*": "allow",
-          "*": "allow"
+          "git push --force-with-lease*": "allow"
         }
       },
       "skills": [],
@@ -106,13 +106,37 @@
       "prompt": "You are an evidence investigation and review agent. Gather, verify, and weigh evidence, then report findings with exact citations and honest confidence. You host pstack's why and reflect evidence roles: repository and session archaeology, transcript and thread mining, code and documentation reading, and multi-source synthesis. Use shell and MCP tools for reading, listing, diffing, and querying. Stay read-only: never edit files, write code, commit, push, or mutate state; run only non-destructive commands. Verify claims against primary sources before reporting; never invent a source or citation, and mark anything unverified as unverified. Report compactly: finding, evidence (path, URL, or command), confidence. Do not implement changes or make design decisions.",
       "orchestratorPrompt": "Delegate to @investigator for evidence-backed investigation and review: root-cause archaeology, session or transcript mining, git, ticket, and thread evidence gathering, citation verification, and multi-source synthesis with shell and MCP access. It is read-only. Prefer @explorer for quick file or symbol lookup, @librarian for external docs, and @oracle for advisory judgment or design review. Never route code edits or implementation to it.",
       "permission": {
+        "*": "deny",
+        "read": {
+          "*": "allow",
+          "*.env": "ask",
+          "*.env.*": "ask",
+          "*.env.example": "allow"
+        },
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "lsp": "allow",
+        "codesearch": "allow",
+        "ast_grep_search": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "external_directory": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "apply_patch": "deny",
+        "ast_grep_replace": "deny",
+        "task": "deny",
         "bash": {
-          "git push --force*": "deny",
-          "git reset --hard*": "deny",
-          "git clean -f*": "deny",
+          "*": "allow",
+          "git commit*": "deny",
+          "git push*": "deny",
+          "git reset*": "deny",
+          "git clean*": "deny",
+          "git checkout*": "deny",
           "git branch -D*": "deny",
-          "git push --force-with-lease*": "allow",
-          "*": "allow"
+          "rm *": "deny",
+          "mv *": "deny"
         }
       },
       "skills": [],
