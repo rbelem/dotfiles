@@ -84,13 +84,13 @@
       "permission": {
         "bash": {
           "*": "allow",
-          "*push --force*": "deny",
+          "*push*--force*": "deny",
           "*push -f*": "deny",
           "*push*+*": "deny",
           "*reset --hard*": "deny",
           "*git clean*": "deny",
           "*branch -D*": "deny",
-          "*push --force-with-lease*": "allow"
+          "*push*--force-with-lease*": "allow"
         }
       },
       "skills": [],
