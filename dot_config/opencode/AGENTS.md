@@ -50,6 +50,10 @@ this account's own:
   commit in the Workspace repo.
 - `oh-my-opencode-slim.jsonc`, `opencode.jsonc` are real files,
   chezmoi-managed. Save with `chezmoi add <file>` (auto-commits).
+- `~/.agents/skills/build-webmcp-tools` is the upstream Chrome WebMCP skill
+  (locked by the skills CLI). Our `webmcp` skill — a symlink into
+  `~/Workspace/github.com/rbelem/skills/webmcp/` — adds this machine's browser
+  facts. See `~/.config/opencode/docs/web-webmcp.md`.
 
 ## No Narration Bookkeeping (sentinel / board / pre-action)
 
