@@ -1470,6 +1470,33 @@
       "skillFolderHash": "66e27de09c7b96466de4c19d3bebc2f244f9959b",
       "installedAt": "2026-10-16T18:43:13.164Z",
       "updatedAt": "2026-10-16T18:43:13.164Z"
+    },
+    "ast-grep": {
+      "source": "ast-grep/agent-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ast-grep/agent-skill.git",
+      "skillPath": "ast-grep/skills/ast-grep/SKILL.md",
+      "skillFolderHash": "1f1877bfb051fff6e6de5ebe529fb47758a03367",
+      "installedAt": "2026-10-19T01:31:53.728Z",
+      "updatedAt": "2026-10-19T01:31:53.728Z"
+    },
+    "ast-grep-outline": {
+      "source": "ast-grep/agent-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ast-grep/agent-skill.git",
+      "skillPath": "ast-grep/skills/outline/SKILL.md",
+      "skillFolderHash": "7ee23d31b0578aa6702d8bbafa15749fc499a8c0",
+      "installedAt": "2026-10-19T01:31:53.749Z",
+      "updatedAt": "2026-10-19T01:31:53.749Z"
+    },
+    "build-webmcp-tools": {
+      "source": "GoogleChromeLabs/webmcp-tools",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/GoogleChromeLabs/webmcp-tools.git",
+      "skillPath": "webmcp-skills/skills/build-webmcp-tools/SKILL.md",
+      "skillFolderHash": "049c1f34edc597a7c0d5eaaeafa41fdeea790c91",
+      "installedAt": "2026-10-19T16:42:58.409Z",
+      "updatedAt": "2026-10-19T16:42:58.409Z"
     }
   },
   "dismissed": {
