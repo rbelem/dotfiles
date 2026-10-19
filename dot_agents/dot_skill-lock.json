@@ -718,36 +718,36 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack-update/SKILL.md",
-      "skillFolderHash": "8cd18e8cc465cb381142547c4cb1a8a25a12e514",
+      "skillFolderHash": "06c2285ef2a0e57a38fb6e5d05d096aeb2a2943c",
       "installedAt": "2026-08-28T00:04:54.265Z",
-      "updatedAt": "2026-09-25T20:07:29.929Z"
+      "updatedAt": "2026-10-18T23:17:18.553Z"
     },
     "architect": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/architect/SKILL.md",
-      "skillFolderHash": "cf02d22fa36eff1d3b7a0ab5d8a00b613dfc77a7",
+      "skillFolderHash": "cb15b81bdf41e2a1eb4f2118ee0442d1133a4a5d",
       "installedAt": "2026-08-28T00:04:54.268Z",
-      "updatedAt": "2026-10-13T18:48:49.168Z"
+      "updatedAt": "2026-10-18T22:57:59.056Z"
     },
     "arena": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/arena/SKILL.md",
-      "skillFolderHash": "3880b04783616aea98e3bd2ef31b5c1ff9e8df1a",
+      "skillFolderHash": "9ae25b2a4ba630ecc75126afbfc17c8f14aa1e7c",
       "installedAt": "2026-08-28T00:04:54.270Z",
-      "updatedAt": "2026-10-15T00:30:12.635Z"
+      "updatedAt": "2026-10-18T22:58:02.343Z"
     },
     "automate-me": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/automate-me/SKILL.md",
-      "skillFolderHash": "434f47127bf83b167c81d2ffe2849b8587a3efd2",
+      "skillFolderHash": "694a723004829d2b2bbe192d346687484d1d73b5",
       "installedAt": "2026-08-28T00:04:54.272Z",
-      "updatedAt": "2026-10-15T00:30:12.651Z"
+      "updatedAt": "2026-10-18T22:10:35.137Z"
     },
     "blast-radius": {
       "source": "rbelem/skills",
@@ -781,27 +781,27 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/figure-it-out/SKILL.md",
-      "skillFolderHash": "7ba3256093e27828e829cf8f0ac63f476b32bf1e",
+      "skillFolderHash": "58fd87560398356db9f1afdb87f6f5c4fe1d86b2",
       "installedAt": "2026-08-28T00:04:54.276Z",
-      "updatedAt": "2026-10-15T00:30:12.653Z"
+      "updatedAt": "2026-10-18T22:10:38.346Z"
     },
     "how": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/how/SKILL.md",
-      "skillFolderHash": "3153d0f0632a754cb63a930de051213c40ed160b",
+      "skillFolderHash": "12c8a1dc10144f0ac32474443cdaefaab050e913",
       "installedAt": "2026-08-28T00:04:54.277Z",
-      "updatedAt": "2026-10-15T00:30:12.655Z"
+      "updatedAt": "2026-10-18T22:10:44.865Z"
     },
     "interrogate": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/interrogate/SKILL.md",
-      "skillFolderHash": "642caccaf9102b0b5984e8495d126942ffe5f043",
+      "skillFolderHash": "98e0e989db27b64a105541517613397d385dda9d",
       "installedAt": "2026-08-28T00:04:54.278Z",
-      "updatedAt": "2026-10-15T00:30:12.657Z"
+      "updatedAt": "2026-10-18T22:58:06.575Z"
     },
     "maintain-verification-skill": {
       "source": "rbelem/skills",
@@ -826,18 +826,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/no-comments/SKILL.md",
-      "skillFolderHash": "50d8e1f78d842ac446f752b0cd971f51149a0952",
+      "skillFolderHash": "151bae935bf265694618e2c91f36cef8fa1d41b0",
       "installedAt": "2026-08-28T00:04:54.283Z",
-      "updatedAt": "2026-10-15T00:30:12.661Z"
+      "updatedAt": "2026-10-18T22:10:52.970Z"
     },
     "poteto-mode": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/poteto-mode/SKILL.md",
-      "skillFolderHash": "32cc0d9f875965bea0257734388edc765815ef50",
+      "skillFolderHash": "80c38c6957e923b0fd9b3dcb1aa0dc856d2272de",
       "installedAt": "2026-08-28T00:04:54.285Z",
-      "updatedAt": "2026-10-15T00:30:12.664Z"
+      "updatedAt": "2026-10-18T23:17:01.331Z"
     },
     "principle-boundary-discipline": {
       "source": "rbelem/skills",
@@ -1051,45 +1051,45 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/recall/SKILL.md",
-      "skillFolderHash": "0746ad94e474675bfb1048376c6aa899168fd27f",
+      "skillFolderHash": "b03c3405757acc4bcd2e775148f9605db50bd752",
       "installedAt": "2026-08-28T00:04:54.332Z",
-      "updatedAt": "2026-10-15T00:30:12.665Z"
+      "updatedAt": "2026-10-18T22:11:05.052Z"
     },
     "reflect": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/reflect/SKILL.md",
-      "skillFolderHash": "ba989799b058b071fcba23f7f0d3a459ec82f38c",
+      "skillFolderHash": "329ac078ac3128f25547882256fd287300b91cbc",
       "installedAt": "2026-08-28T00:04:54.333Z",
-      "updatedAt": "2026-10-15T00:30:12.667Z"
+      "updatedAt": "2026-10-18T23:17:07.392Z"
     },
     "setup-pstack": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/setup-pstack/SKILL.md",
-      "skillFolderHash": "d76ce0f368a069539e5a8d2a3dbfa3a4da356992",
+      "skillFolderHash": "387b18dd68e4e3f219cf935825dbf3b9dfceed36",
       "installedAt": "2026-08-28T00:04:54.335Z",
-      "updatedAt": "2026-10-13T18:51:10.423Z"
+      "updatedAt": "2026-10-18T23:17:10.876Z"
     },
     "show-me-your-work": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/show-me-your-work/SKILL.md",
-      "skillFolderHash": "122e9134bf90297f0102134f20160fe9dd4abab8",
+      "skillFolderHash": "f9c9ee16842c6f10d35cafaba86859f49494f3b0",
       "installedAt": "2026-08-28T00:04:54.337Z",
-      "updatedAt": "2026-10-15T00:30:12.670Z"
+      "updatedAt": "2026-10-18T22:11:15.041Z"
     },
     "swarm": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/swarm/SKILL.md",
-      "skillFolderHash": "872e4f75892ed2eccec28c259edb4c78c076c4d5",
+      "skillFolderHash": "c0e7a6db784dc8f143ee53f9ab230dbff5a2757c",
       "installedAt": "2026-08-28T00:04:54.338Z",
-      "updatedAt": "2026-10-15T00:30:12.672Z"
+      "updatedAt": "2026-10-18T22:58:28.471Z"
     },
     "technical-writing": {
       "source": "rbelem/skills",
@@ -1123,9 +1123,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/why/SKILL.md",
-      "skillFolderHash": "e7ae600e61b5653df6b194a251f9b34f7d141429",
+      "skillFolderHash": "908cb7e1a06e2e479273a6a6ee925f44f6f6faf9",
       "installedAt": "2026-08-28T00:04:54.345Z",
-      "updatedAt": "2026-10-15T00:30:12.674Z"
+      "updatedAt": "2026-10-18T23:17:15.179Z"
     },
     "improve-claude-md": {
       "source": "humanlayer/skills",
@@ -1422,18 +1422,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "pstack/skills/poteto-help/SKILL.md",
-      "skillFolderHash": "426162a8be58467bb40367e96a7d68f828e4a05e",
+      "skillFolderHash": "e8f48103b2902b2c92b40fade115c2aa9a7c952c",
       "installedAt": "2026-10-13T18:49:38.611Z",
-      "updatedAt": "2026-10-15T00:30:12.662Z"
+      "updatedAt": "2026-10-18T23:16:57.449Z"
     },
     "desktop-browser-automation": {
       "source": "rbelem/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rbelem/skills.git",
       "skillPath": "desktop-browser-automation/SKILL.md",
-      "skillFolderHash": "3d74b47333337916b00830f3a153ff7b3a961f34",
+      "skillFolderHash": "c24406c45b4bd25a9a0d480e52aa0064da435a8b",
       "installedAt": "2026-10-13T20:43:27.386Z",
-      "updatedAt": "2026-10-13T20:56:41.486Z"
+      "updatedAt": "2026-10-17T14:55:12.952Z"
     },
     "sharpen": {
       "source": "rbelem/skills",
@@ -1452,6 +1452,24 @@
       "skillFolderHash": "4ba388a03765d7087129c210a175fc9d264f46fe",
       "installedAt": "2026-10-16T01:00:11.979Z",
       "updatedAt": "2026-10-16T01:00:11.979Z"
+    },
+    "extension-review": {
+      "source": "quangpl/browser-extension-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/quangpl/browser-extension-skills.git",
+      "skillPath": "skills/extension-review/SKILL.md",
+      "skillFolderHash": "05e7b13769cbf4f3916c3fc763fcbca4d878c889",
+      "installedAt": "2026-10-16T18:43:08.898Z",
+      "updatedAt": "2026-10-16T18:43:08.898Z"
+    },
+    "chrome-webstore-release-blueprint": {
+      "source": "brianlovin/agent-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/brianlovin/agent-config.git",
+      "skillPath": "skills/chrome-webstore-release-blueprint/SKILL.md",
+      "skillFolderHash": "66e27de09c7b96466de4c19d3bebc2f244f9959b",
+      "installedAt": "2026-10-16T18:43:13.164Z",
+      "updatedAt": "2026-10-16T18:43:13.164Z"
     }
   },
   "dismissed": {
