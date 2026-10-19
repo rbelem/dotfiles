@@ -9,20 +9,21 @@
           { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" },
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" },
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" },
-          "opencode-go/mimo-v2.6-flash"
+          { "id": "opencode-go/mimo-v2.6-flash", "variant": "default" }
         ],
         "variant": "high"
       },
       "oracle": {
         "model": [
           { "id": "opencode-go/glm-5.3", "variant": "max" },
-          { "id": "opencode-go/space-bunny", "variant": "high" },
-          { "id": "opencode-go/kimi-k3", "variant": "high" }
+          { "id": "opencode-go/kimi-k3", "variant": "max" },
+          { "id": "opencode-go/deepseek-v4.1-flash", "variant": "max" }
         ],
         "variant": "max"
       },
       "librarian": {
         "model": [
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" },
           { "id": "opencode/glm-5.3-flash-free", "variant": "low" },
           { "id": "opencode-go/beam-free", "variant": "low" },
           { "id": "opencode-go/gpt-6-luna", "variant": "low" },
@@ -33,26 +34,28 @@
       "explorer": {
         "model": [
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "low" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" },
           { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
           { "id": "opencode-go/beam-free", "variant": "high" },
-          "opencode-go/mimo-v2.6-flash"
+          { "id": "opencode-go/mimo-v2.6-flash", "variant": "default" }
         ],
         "variant": "low"
       },
       "designer": {
         "model": [
-          { "id": "opencode-go/qwen3.8-max", "variant": "high" },
+          { "id": "opencode-go/qwen3.8-max", "variant": "xhigh" },
+          { "id": "opencode-go/qwen3.8-flash", "variant": "xhigh" },
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" }
         ],
-        "variant": "high"
+        "variant": "xhigh"
       },
       "fixer": {
         "model": [
           { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" },
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" },
           { "id": "opencode-go/glm-5.3-flash", "variant": "high" },
-          { "id": "opencode-go/space-bunny", "variant": "high" },
-          "opencode-go/mimo-v2.6-flash"
+          { "id": "opencode-go/muse-spark-1.2-contributor", "variant": "high" },
+          { "id": "opencode-go/mimo-v2.6-flash", "variant": "default" }
         ],
         "variant": "high"
       },
@@ -65,7 +68,7 @@
       "council": {
         "model": [
           { "id": "opencode-go/glm-5.3", "variant": "max" },
-          "opencode-go/mimo-v2.6-pro"
+          { "id": "opencode-go/mimo-v2.6-pro", "variant": "default" }
         ],
         "variant": "max"
       }
@@ -74,8 +77,9 @@
   "agents": {
     "fast-generic": {
       "model": [
-        { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
+        { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" },
         { "id": "opencode-go/beam-free", "variant": "high" },
+        { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
         { "id": "opencode-go/claude-haiku-5-5", "variant": "low" },
         { "id": "opencode-go/glm-5.3-flash", "variant": "low" }
       ],
@@ -89,7 +93,8 @@
       "model": [
         { "id": "opencode-go/glm-5.3", "variant": "high" },
         { "id": "opencode-go/deepseek-v4.1-flash", "variant": "high" },
-        { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" }
+        { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "high" },
+        { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" }
       ],
       "variant": "high",
       "prompt": "You are an evidence investigation and review agent. Gather, verify, and weigh evidence, then report findings with exact citations and honest confidence. You host pstack's why and reflect evidence roles: repository and session archaeology, transcript and thread mining, code and documentation reading, and multi-source synthesis. Use shell and MCP tools for reading, listing, diffing, and querying. Stay read-only: never edit files, write code, commit, push, or mutate state; run only non-destructive commands. Verify claims against primary sources before reporting; never invent a source or citation, and mark anything unverified as unverified. Report compactly: finding, evidence (path, URL, or command), confidence. Do not implement changes or make design decisions.",
@@ -160,7 +165,7 @@
     "presets": {
       "default": {
         "alpha": {
-          "model": ["opencode-go/kimi-k3"],
+          "model": ["opencode-go/kimi-k3", "opencode-go/glm-5.3"],
           "variant": "max"
         },
         "beta": {
@@ -172,7 +177,8 @@
           "variant": "xhigh"
         },
         "delta": {
-          "model": ["opencode-go/mimo-v2.6-pro"]
+          "model": ["opencode-go/mimo-v2.6-pro"],
+          "variant": "default"
         }
       }
     }

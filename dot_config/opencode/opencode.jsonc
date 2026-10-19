@@ -6,7 +6,8 @@
   // Muse Spark 1.3 Contributor (data-use tier) drives the main session since
   // 2026-10-15 — note: on V2 hosts the MAIN session model is the root `model`
   // below, not the preset's orchestrator entry (that entry drives the
-  // agent-config + fallback chain: muse → glm-5.3-flash → mimo → deepseek).
+  // agent-config + fallback chain: deepseek-v4.1-flash → muse → glm-5.3-flash
+  // → mimo-v2.6-flash).
   "model": "opencode-go/muse-spark-1.3-contributor",
   "variant": "high",
   "providers": {
@@ -113,7 +114,7 @@
           "--daemon-url",
           "http://127.0.0.1:7456"
         ],
-        "enabled": false,
+        "disabled": true,
         "timeout": {
           "catalog": 120000,
           "execution": 1800000
@@ -128,7 +129,7 @@
           "--mcp-toolset",
           "full"
         ],
-        "enabled": true,
+        "disabled": false,
         "timeout": {
           "catalog": 600000,
           "execution": 600000
@@ -256,13 +257,18 @@
       "disabled": true
     },
     "title": {
-      "model": "opencode-go/muse-spark-1.3-contributor"
+      // space-bunny-free was retired server-side (Oct 19 probe: "Model
+      // unavailable"). MiniMax M3.1 Flash Free replaced it: free, unlimited
+      // Go quota, 1M ctx, no training + 0-day retention.
+      "model": "opencode-go/minimax-m3.1-flash-free"
     },
     "compaction": {
-      "model": "opencode-go/muse-spark-1.3-contributor"
+      //"model": "opencode-go/muse-spark-1.3-contributor"
+      "model": "opencode-go/minimax-m3.1-flash-free"
     },
     "summary": {
-      "model": "opencode-go/muse-spark-1.3-contributor"
+      //"model": "opencode-go/muse-spark-1.3-contributor"
+      "model": "opencode-go/minimax-m3.1-flash-free"
     },
     "autolearn-reviewer": {
       "description": "Reviews past conversations for self-improvement opportunities",
