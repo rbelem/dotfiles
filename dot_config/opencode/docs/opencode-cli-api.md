@@ -56,6 +56,14 @@ opencode api POST /api/session/<id>/compact -d '{}'
 session actually contains — which tool was called, with what input, and what
 it returned — without scraping the TUI.
 
+### The v1/v2 tool-part trap
+
+A tool part in a v2 session is `{ name, state: { status, input, content } }`.
+The v1 shape was `{ tool, input, state: { status, output } }`. Querying the v1
+names against a v2 session does not error — it returns empty strings, so a
+script appears to work while printing nothing. `content` is an array of
+`{ type, text }` parts, not a string.
+
 ### Traps
 
 - **There is no operation-list endpoint.** `opencode api` with no argument
