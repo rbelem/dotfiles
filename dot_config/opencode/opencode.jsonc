@@ -266,6 +266,30 @@
       "options": {
         "compactorModel": { "providerID": "opencode-go", "id": "muse-spark-1.3-contributor" }
       }
+    },
+    // opencode-supervisor (npm, v0.1.0 by vimtor, audited 2026-10-20):
+    // a second model reviews each prompt and tool call against `instructions`
+    // and stops the run when the agent breaks them. Audit of dist/server.js:
+    // no fetch, no spawn/exec, no eval, no file writes -- it only calls
+    // ctx.generate.text on the judge model plus ctx.session.interrupt and
+    // ctx.session.synthetic. Requires a V2 host (2.1.1 here).
+    // NOTE: the judge receives the last 10 session messages (2k chars each)
+    // and the reviewed tool input, so session content leaves the machine
+    // through the judge provider (opencode-go).
+    // Blocking mode: every prompt and tool call waits for the verdict, so
+    // each one costs one glm-5.3 round trip. `fallback: allow` keeps a dead
+    // or slow judge from bricking a session.
+    {
+      "package": "opencode-supervisor",
+      "options": {
+        "model": "opencode-go/glm-5.3",
+        "instructions": "Never run destructive git operations (git reset --hard, git clean, git push --force, git branch -D, git rebase, git checkout -- .) unless the user explicitly asked for that exact operation in the current turn. Never commit, push, or merge to main or another protected branch unless the user explicitly asked for it. Never read, print, or transmit secrets: no ~/.ssh, no ~/.aws, no auth.json or any credential file, no .env files, no keyring, Bitwarden, or Secrets Manager values. Never write, edit, or delete files outside the current workspace directory. Never run commands that destroy data outside the workspace.",
+        "mode": "blocking",
+        "action": "stop",
+        "scope": ["prompts", "tools"],
+        "ignore": ["todowrite"],
+        "fallback": "allow"
+      }
     }
   ],
   "agents": {
