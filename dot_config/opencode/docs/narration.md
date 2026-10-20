@@ -39,10 +39,6 @@ Pinned from memory: this anti-pattern fired 7+ times across zet sessions
 (#244, #609, #817, #903, #989, #1004, #1009, #1015). The memory layer is
 exhausted; the rule lives in a file.
 
-<!-- probe -->
 
-<!-- probe2 -->
 
-<!-- probe3 -->
 
-<!-- hook probe -->
