@@ -82,6 +82,17 @@ After the FIRST turn that acknowledges bookkeeping, subsequent turns
 in the same session MUST contain ZERO acknowledgment of the same
 reminder, even if the reminder fires again.
 
+## Task Tracking
+
+For any task with 3 or more distinct steps, call `todowrite` BEFORE
+starting work. List the steps as todos, keep exactly one `in_progress`
+while working, mark an item `completed` the moment it is done and
+`cancelled` when it is dropped. The list is the plan — do not restate
+it in prose.
+
+`todowrite` replaces the whole list on every call, so always send the
+complete set of items, not just the one that changed.
+
 ## Response style
 
 `~/.config/opencode/docs/response-style.md` holds the status-reporting,
