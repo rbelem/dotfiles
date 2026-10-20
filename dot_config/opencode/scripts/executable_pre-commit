@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Pre-commit hook for the chezmoi source repo (~/.local/share/chezmoi).
+#
+# The source repo holds every agent-config file (AGENTS.md, opencode.jsonc,
+# cli.json, skills, scripts). It had no guardrail, so an un-synced edit to a
+# live config file could sit unnoticed and every later session would run with
+# the wrong configuration.
+#
+# Installed with:  bun/node ~/.config/opencode/scripts/check-config.mjs --install
+# Checks: config files parse, config structure is sane, live tree matches source.
+set -uo pipefail
+
+exec node "$HOME/.config/opencode/scripts/check-config.mjs"

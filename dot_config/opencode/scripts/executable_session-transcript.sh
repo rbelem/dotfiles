@@ -38,8 +38,8 @@ esac
 sqlite3 -separator ' | ' "$DB" "
 select m.time_created,
        json_extract(c.value,'\$.type') as kind,
-       coalesce(json_extract(c.value,'\$.tool'),'') as tool,
-       length(coalesce(json_extract(c.value,'\$.state.output'), json_extract(c.value,'\$.text'),'')) as bytes,
+       coalesce(json_extract(c.value,'\$.name'), json_extract(c.value,'\$.tool'),'') as tool,
+       length(coalesce(json_extract(c.value,'\$.state.content'), json_extract(c.value,'\$.state.output'), json_extract(c.value,'\$.text'),'')) as bytes,
        substr(replace(replace(coalesce(
          json_extract(c.value,'\$.state.input.command'),
          json_extract(c.value,'\$.state.input.function'),
