@@ -19,7 +19,8 @@
   "experimental": {
     "disable_paste_summary": true,
     "portable_shell_scanner": true,
-    "subagent_depth": 5
+    "subagent_depth": 5,
+    "todo": true
   },
   "watcher": {
     "ignore": [
@@ -213,7 +214,6 @@
     { "resource": "*", "effect": "allow", "action": "optchat.share" },
   ],
   "plugins": [
-    "/home/rodrigo/Workspace/github.com/rbelem/opencode-todolist",
     // opencode2-cow-worktree (dogfood): installed by DIRECTORY DISCOVERY, not
     // by a `plugins` entry. Every .ts/.js under plugins/ is auto-discovered as
     // a local plugin, and plugins/opencode2-cow-worktree/index.ts is picked up
@@ -236,8 +236,16 @@
     //   model-announcer was retired 2026-10-16. Native v2 covers it.
     // deferred (no V2 support upstream): @slkiser/opencode-quota (TUI-heavy),
     //   @tarquinen/opencode-smart-title (superseded by native title agent)
-    // opencode-todolist (rbelem fork, dogfood): local tree, loads dist/ via
-    //   package.json exports — todowrite/todoread, size caps, storage GC
+    // opencode-todolist was RETIRED 2026-10-20. opencode v2.1.0 restored the
+    //   native todowrite tool behind experimental.todo (see the experimental
+    //   block above) and ships its own sidebar todo (opencode.sidebar.todo),
+    //   so the plugin's server tools and TUI strip are both redundant.
+    //   Deltas accepted at retirement: no todoread tool (the model reads the
+    //   list back from the last todowrite result), no priority field, no
+    //   100-item/2000-char caps, and no per-request context injection of the
+    //   list (native reads it from session message history instead).
+    //   The fork checkout at ~/Workspace/github.com/rbelem/opencode-todolist
+    //   is left on disk, unloaded.
     "oh-my-opencode-slim",
     // OptChat (rbelem fork of ahlner/opencode-optchat @ e4da6fb, audited
     // 2026-10-12: no own network calls, no spawn, no eval; writes confined to

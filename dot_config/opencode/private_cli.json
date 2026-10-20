@@ -5,7 +5,6 @@
   "plugins": [
     "./plugins/opencode-quota/tui.mjs",
     "./herdr-opencode",
-    "/home/rodrigo/Workspace/github.com/rbelem/opencode-todolist",
     "opencode-vim@latest"
   ],
   "diffs": {
