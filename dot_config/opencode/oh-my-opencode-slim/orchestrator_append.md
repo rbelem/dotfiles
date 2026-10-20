@@ -14,7 +14,13 @@
 
 ## Task Tracking
 
-A delegated lane cannot see your todo list — its session is separate. Name
-the todo item that lane owns in the delegation prompt, and update the list
-yourself when the lane reports back. The rule for *when* to open a list lives
-in the global `AGENTS.md` section **Task Tracking**.
+- Track the work itself in `todowrite` (3+ distinct steps): call it before
+  starting, one item `in_progress` at a time, mark items `completed` as they
+  land. Do not narrate progress in prose instead.
+- A delegated lane cannot see your todo list — its session is separate. Name
+  the todo item that lane owns in the delegation prompt, and update the list
+  yourself when the lane reports back.
+
+Measured 2026-10-20: with this trigger in the agent prompt the orchestrator
+used `todowrite` in 5/6 runs; with the rule only in the global AGENTS.md it
+fell to 5/9. Prompt-level repetition of the trigger is deliberate here.
