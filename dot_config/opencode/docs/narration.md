@@ -40,3 +40,7 @@ Pinned from memory: this anti-pattern fired 7+ times across zet sessions
 exhausted; the rule lives in a file.
 
 <!-- probe -->
+
+<!-- probe2 -->
+
+<!-- probe3 -->
