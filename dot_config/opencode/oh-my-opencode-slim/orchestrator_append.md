@@ -21,6 +21,9 @@
   the todo item that lane owns in the delegation prompt, and update the list
   yourself when the lane reports back.
 
-Measured 2026-10-20: with this trigger in the agent prompt the orchestrator
-used `todowrite` in 5/6 runs; with the rule only in the global AGENTS.md it
-fell to 5/9. Prompt-level repetition of the trigger is deliberate here.
+Measured 2026-10-20 on the same task, same model, 3+ step work:
+with this trigger in the agent prompt the orchestrator used `todowrite` in
+6/6 runs; with the rule only in the global AGENTS.md it fell to 5/9. The
+default agent reached 6/6 from the AGENTS.md rule alone. Prompt-level
+repetition of the trigger is deliberate here — the orchestrator's prompt
+dilutes the file-level rule.
