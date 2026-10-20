@@ -59,11 +59,12 @@ it returned — without scraping the TUI.
 ### Traps
 
 - **There is no operation-list endpoint.** `opencode api` with no argument
-  errors out. The namespaces mirror the client package layout
-  (`session`, `message`, `config`, `plugin`, `agent`, `model`, `permission`,
-  `debug`, `event`, `tool`, `vcs`, `worktree`, `skill`, `mcp`, `provider`,
-  `reference`, `websearch`, `integration`, `credential`, `command`,
-  `generate`, `rpc`).
+  errors out. The namespaces mirror the client package layout: `agent`,
+  `command`, `config`, `credential`, `debug`, `event`, `experimental`,
+  `file`, `form`, `generate`, `integration`, `location`, `mcp`, `message`,
+  `migration`, `model`, `permission`, `plugin`, `project`, `provider`, `pty`,
+  `reference`, `rpc`, `server`, `session`, `shell`, `skill`, `vcs`, `voice`,
+  `websearch`, `worktree`.
 - **`/doc` and `/swagger.json` on the server are NOT an API spec.** They
   return the TUI's SPA HTML with HTTP 200. A 200 there means "the SPA
   answered", not "here is the spec". Do not spend a call on it.
