@@ -201,6 +201,16 @@
     { "resource": "~/Workspace/github.com/*", "effect": "allow", "action": "external_directory" },
     { "resource": "~/Workspace/rbelem/*", "effect": "allow", "action": "edit" },
     { "resource": "~/Workspace/rbelem/*", "effect": "allow", "action": "external_directory" },
+
+    // OptChat memory (optchat.memory plugin). MUST stay at the END of this
+    // array: the plugin resolves policy by LAST matching rule and treats any
+    // effect other than "allow" as a denial. The `{action:"*",effect:"ask"}`
+    // wildcard above therefore revoked memory for every session
+    // (read=false/share=false -> "Memory read permission was revoked" ->
+    // MEMORY_NOT_READY -> every turn fell back to native). These two rules
+    // re-grant it. Verified: policy digest flips 38572924... -> 49642803...
+    { "resource": "*", "effect": "allow", "action": "optchat.read" },
+    { "resource": "*", "effect": "allow", "action": "optchat.share" },
   ],
   "plugins": [
     "/home/rodrigo/Workspace/github.com/rbelem/opencode-todolist",
