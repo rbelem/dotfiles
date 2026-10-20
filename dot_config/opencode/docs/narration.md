@@ -44,3 +44,5 @@ exhausted; the rule lives in a file.
 <!-- probe2 -->
 
 <!-- probe3 -->
+
+<!-- hook probe -->
