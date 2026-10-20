@@ -14,9 +14,7 @@
 
 ## Task Tracking
 
-- Track the work itself in `todowrite` (3+ distinct steps): call it before
-  starting, one item `in_progress` at a time, mark items `completed` as they
-  land. Do not narrate progress in prose instead.
-- A delegated lane cannot see your todo list — its session is separate. Name
-  the todo item that lane owns in the delegation prompt, and update the list
-  yourself when the lane reports back.
+A delegated lane cannot see your todo list — its session is separate. Name
+the todo item that lane owns in the delegation prompt, and update the list
+yourself when the lane reports back. The rule for *when* to open a list lives
+in the global `AGENTS.md` section **Task Tracking**.

@@ -27,9 +27,12 @@ before handoff so the next session grounds on disk, not the registry.
 
 ## Coding Standards
 
-**Coding** — writing or editing code, unclear requirements, or a
-multi-step task: read `~/.config/opencode/CODING_STANDARDS.md` before
-implementing.
+**Code** — before writing or editing code (not a shell one-liner, not a
+throwaway probe): read `~/.config/opencode/CODING_STANDARDS.md`. It is not
+advice, it is the contract the reviewer holds you to — §4's plan format
+(`1. Step → verify: check`) and §2's complexity gate (≤ 10 per function, with
+`[complexity-guard]` violations appended to your write/edit results) both
+apply to you.
 
 ## Commit Identity (never override)
 
@@ -46,15 +49,20 @@ this account's own:
 - `~/.config/opencode/skills/*` are symlinks into
   `~/Workspace/github.com/rbelem/skills/*` (a git checkout). Edit anywhere;
   commit in the Workspace repo.
-- `oh-my-opencode-slim.jsonc`, `opencode.jsonc` are real files,
-  chezmoi-managed. Save with `chezmoi add <file>` (auto-commits).
+- `oh-my-opencode-slim.jsonc`, `opencode.jsonc`, `AGENTS.md`, `docs/` are real
+  files, chezmoi-managed — the source of truth is the repo at
+  `~/.local/share/chezmoi`. **Edit them with `chezmoi edit <path>`** (writes
+  the source and reapplies); writing the live path directly leaves the source
+  stale and the pre-commit hook blocks the next commit. Save with
+  `chezmoi add <file>` (auto-commits). `node ~/.config/opencode/scripts/check-config.mjs`
+  verifies parse, structure, and source↔live drift.
 - `~/.agents/skills/build-webmcp-tools` is the upstream Chrome WebMCP skill
   (locked by the skills CLI). Our `webmcp` skill — a symlink into
   `~/Workspace/github.com/rbelem/skills/webmcp/` — adds this machine's browser
   facts. See `~/.config/opencode/docs/web-webmcp.md`.
 - `docs/` holds the topic docs: `web-webmcp.md`, `web-wigolo.md`,
-  `response-style.md`, `session-transcripts.md`. `scripts/` holds the
-  session-transcript reader.
+  `response-style.md`, `session-transcripts.md`, `opencode-cli-api.md`.
+  `scripts/` holds the session-transcript reader and the config guardrail.
 - `skillspector` scans a skill for security risks: the `skillspector_scan`
   tool, `/skillspector`, and the pre-commit + CI gate in
   `~/Workspace/github.com/rbelem/skills/`.
@@ -77,7 +85,8 @@ user-visible output.
 4. Research progress → final summary at the end, OR one mid-stream
    checkpoint every ~5 turns.
 
-Track remaining work in todowrite, not in user-visible narration.
+Track remaining work in todowrite, not in user-visible narration (see
+**Task Tracking** below).
 After the FIRST turn that acknowledges bookkeeping, subsequent turns
 in the same session MUST contain ZERO acknowledgment of the same
 reminder, even if the reminder fires again.
@@ -91,7 +100,9 @@ while working, mark an item `completed` the moment it is done and
 it in prose.
 
 `todowrite` replaces the whole list on every call, so always send the
-complete set of items, not just the one that changed.
+complete set of items, not just the one that changed. Its schema is
+`{ content, status }` only — there is no priority field, so put urgency
+in the content text ("[high] fix flaky checkout").
 
 ## Response style
 
@@ -102,13 +113,32 @@ wording, naming, and structure rules. Answer first, evidence after.
 
 After a fetch, quote the relevant excerpt and work from it; don't re-quote whole pages.
 
-Two sources that mislead:
+Three sources that mislead:
 
 - **Chromium source**: grep.app does not index it. Fetch raw files from the
   GitHub mirror instead — `raw.githubusercontent.com/chromium/chromium/main/<path>`.
+- **grep.app is rate-limited**: `gh_grep` returns "Too Many Requests" under
+  load. On a 429, fall back to the GitHub tree API + `raw.githubusercontent.com`
+  — do not retry the MCP.
 - **Skill registry**: `skills find <query>` and
   `https://skills.sh/api/search?q=<query>` list every published skill. Search
   there before hunting GitHub or npm.
+
+## Opencode itself
+
+`~/.config/opencode/docs/opencode-cli-api.md` is the map for the running
+opencode: the read-only CLI (`debug config`, `plugin list`, `reload`), the
+HTTP API (`opencode api <namespace>.<method>`), the upstream source layout
+(`anomalyco/opencode`, `packages/{core,tui,plugin,client,schema}/src`), and
+the traps — `/doc` is the SPA, not a spec, and `experimental.*` typos are
+ignored silently. Read it before spelunking upstream source or guessing an
+endpoint.
+
+## Long-running commands
+
+Anything over ~5 minutes goes to `background: true` with an explicit
+`timeout`. A foreground call dies with the server and takes its output with
+it; a background call survives and still notifies you.
 
 ## Session transcripts
 

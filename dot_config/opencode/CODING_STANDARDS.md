@@ -60,3 +60,9 @@ For multi-step tasks, state a brief plan:
 2. [Step] → verify: [check]
 3. [Step] → verify: [check]
 ```
+
+**Report the strength of the evidence with the claim.** One observation is
+an anecdote. Say `n=1` when that is all you have, sample before you
+generalize, and retract explicitly — out loud — when a wider sample
+contradicts the first one. A claim that outruns its evidence fails this
+section even when the claim happens to be true.

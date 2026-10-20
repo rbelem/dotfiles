@@ -30,7 +30,9 @@ Correct behavior:
    checkpoint every ~5 turns. Never "Now I have the picture. Let me
    also check X" preambles per turn.
 
-Track remaining work in todowrite, not in user-visible narration.
+Track remaining work in todowrite, not in user-visible narration — the
+rule for *when* a todo list exists lives in the global `AGENTS.md` section
+**Task Tracking**; this file only covers where the plan may be shown.
 After the FIRST turn that acknowledges bookkeeping, subsequent turns
 in the same session MUST contain ZERO acknowledgment of the same
 reminder, even if the reminder fires again.
