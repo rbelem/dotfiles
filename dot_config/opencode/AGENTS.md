@@ -126,13 +126,11 @@ Three sources that mislead:
 
 ## Opencode itself
 
-`~/.config/opencode/docs/opencode-cli-api.md` is the map for the running
-opencode: the read-only CLI (`debug config`, `plugin list`, `reload`), the
-HTTP API (`opencode api <namespace>.<method>`), the upstream source layout
-(`anomalyco/opencode`, `packages/{core,tui,plugin,client,schema}/src`), and
-the traps — `/doc` is the SPA, not a spec, and `experimental.*` typos are
-ignored silently. Read it before spelunking upstream source or guessing an
-endpoint.
+`~/.config/opencode/docs/opencode-cli-api.md` — the read-only CLI
+(`debug config`, `plugin list`, `reload`), the HTTP API
+(`opencode api <namespace>.<method>`), the upstream source layout, and the
+traps (`/doc` is the SPA, not a spec). Read it before spelunking upstream
+source or guessing an endpoint.
 
 ## Long-running commands
 
