@@ -55,7 +55,8 @@ this account's own:
   the source and reapplies); writing the live path directly leaves the source
   stale and the pre-commit hook blocks the next commit. Save with
   `chezmoi add <file>` (auto-commits). `node ~/.config/opencode/scripts/check-config.mjs`
-  verifies parse, structure, and source↔live drift.
+  verifies parse, structure, and source↔live drift; it installs the guardrail
+  hook with `--install` (needed once per fresh clone of the chezmoi repo).
 - `~/.agents/skills/build-webmcp-tools` is the upstream Chrome WebMCP skill
   (locked by the skills CLI). Our `webmcp` skill — a symlink into
   `~/Workspace/github.com/rbelem/skills/webmcp/` — adds this machine's browser
