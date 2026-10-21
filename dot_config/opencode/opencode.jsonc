@@ -75,7 +75,8 @@
           "-y",
           "chrome-devtools-mcp@latest",
           "--autoConnect"
-        ]
+        ],
+        "disabled": true
       },
       "firefox-devtools": {
         "type": "local",
@@ -86,7 +87,8 @@
           "--connectExisting",
           "--marionettePort",
           "2828"
-        ]
+        ],
+        "disabled": true
       },
       "opencode-docs": {
         "type": "local",
@@ -95,7 +97,7 @@
           "-y",
           "opencode-docs-mcp@latest"
         ],
-        "enabled": false,
+        "disabled": true
       },
       "codegraph": {
         "type": "local",
@@ -163,13 +165,16 @@
           "JEV_API_KEY": "{env:JEV_API_KEY}",
           "OPENROUTER_API_KEY": "{env:OPENROUTER_API_KEY}"
         }
+      },
+      "cua": {
+        "type": "local",
+        "command": [
+          "cua",
+          "mcp"
+        ],
+        "disabled": false
       }
     },
-    "cua": {
-      "type": "local",
-      "command": ["/home/rodrigo/.local/share/devbox/global/default/.devbox/nix/profile/default/bin/cua", "mcp"],
-      "enabled": true
-    }
   },
   "permissions": [
     { "resource": "*", "effect": "ask", "action": "*" },

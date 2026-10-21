@@ -42,9 +42,8 @@ log_file = "~/.local/share/dcg/blocked.log"
 # traversal attempt out of the exempt directory.
 [rules."core.filesystem:rm-rf-root-home"]
 exempt_target_globs = [
-  "~/.cache/opencode-scratch/**",
-  "/home/rodrigo/.cache/opencode-scratch/**",
-  "/tmp/opencode/**",
+  "~/.cache/**",
+  "/tmp/**",
 ]
 
 # ── Downgrades: warn instead of deny ──────────────────────────────────────
