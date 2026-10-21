@@ -7,7 +7,10 @@
 # the wrong configuration.
 #
 # Installed with:  bun/node ~/.config/opencode/scripts/check-config.mjs --install
-# Checks: config files parse, config structure is sane, live tree matches source.
+# Checks: config files parse, config structure is sane, live tree matches source,
+#         and the shell guards are not inert (scripts/probe-guards.mjs).
 set -uo pipefail
+
+node "$HOME/.config/opencode/scripts/probe-guards.mjs" || exit 1
 
 exec node "$HOME/.config/opencode/scripts/check-config.mjs"
