@@ -7,9 +7,10 @@
 //
 // The scanner ships two ways on this box:
 //   - the nix package in devbox-global (devbox.d/skillspector), on PATH
-//     inside a devbox shell
+//     inside a devbox shell - the one the skills repo's gate uses, so it is
+//     preferred
 //   - a uv tool install at ~/.local/bin/skillspector, which needs a clean
-//     PYTHONPATH outside the devbox shell
+//     PYTHONPATH outside the devbox shell - the fallback
 // SKILLSPECTOR_BIN overrides both.
 //
 // No package imports (node builtins only): the supervisor decodes a bare
@@ -28,9 +29,28 @@ const MAX_REPORT_BYTES = 60_000;
 function resolveBinary() {
   const explicit = process.env.SKILLSPECTOR_BIN;
   if (explicit && fs.existsSync(explicit)) return explicit;
+  // The nix package first: it is the one the skills repo's own gate
+  // (scripts/scan-skills.sh) runs, so the tool and the gate report the same
+  // version. The uv install at ~/.local/bin is the fallback for a shell with
+  // no devbox profile on PATH.
+  if (which("skillspector")) return "skillspector";
   const uv = path.join(os.homedir(), ".local/bin/skillspector");
   if (fs.existsSync(uv)) return uv;
   return "skillspector";
+}
+
+function which(bin) {
+  const dirs = (process.env.PATH || "").split(path.delimiter);
+  for (const dir of dirs) {
+    const candidate = path.join(dir, bin);
+    try {
+      fs.accessSync(candidate, fs.constants.X_OK);
+      return candidate;
+    } catch {
+      // not here
+    }
+  }
+  return null;
 }
 
 function run(bin, args, env) {
@@ -41,10 +61,23 @@ function run(bin, args, env) {
   });
 }
 
+// The tool declares `output: {type: "string"}`, so every return has to carry
+// the `output` field: OpenCode rejects a result without it with
+// "Tool did not return its declared output" — which is why every earlier
+// call of this tool failed. The sibling plugin wigolo-search.js shows the
+// working shape: {output, content:[{type:"text",text}], metadata}.
+function scanResult(text) {
+  return {
+    output: text,
+    content: [{ type: "text", text }],
+    metadata: { scanner: "skillspector" },
+  };
+}
+
 async function scan(input) {
   const target = String(input.target || "").trim();
   if (!target) {
-    return { content: "skillspector_scan: 'target' is required — a skill directory, a SKILL.md path, a zip, or a Git URL." };
+    return scanResult("skillspector_scan: 'target' is required — a skill directory, a SKILL.md path, a zip, or a Git URL.");
   }
 
   const format = ["terminal", "json", "markdown", "sarif"].includes(input.format) ? input.format : "terminal";
@@ -69,7 +102,7 @@ async function scan(input) {
   const result = await run(bin, args, env);
 
   if (result.code === 2 && !result.stdout.trim()) {
-    return { content: `skillspector_scan: scanner failed to start.\n${result.stderr.slice(0, 2000)}` };
+    return scanResult(`skillspector_scan: scanner failed to start.\n${result.stderr.slice(0, 2000)}`);
   }
 
   const body = result.stdout.trim() || result.stderr.trim();
@@ -77,7 +110,7 @@ async function scan(input) {
 
   const verdict = result.code === 0 ? "no blocking findings" : `scanner exit ${result.code} — see findings below`;
   const written = reportPath ? `\nReport written to ${reportPath}` : "";
-  return { content: `skillspector_scan ${target} — ${verdict}\n\n${truncated}${written}` };
+  return scanResult(`skillspector_scan ${target} — ${verdict}\n\n${truncated}${written}`);
 }
 
 export default {
