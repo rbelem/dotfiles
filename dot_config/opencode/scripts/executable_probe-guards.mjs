@@ -142,6 +142,61 @@ for (const testCase of CASES) {
   }
 }
 
+// coding-standards-gate: blocks the FIRST code/config edit of a session with the
+// full standards text in the error, then passes. A markdown edit never blocks.
+{
+  const name = "coding-standards-gate.js";
+  try {
+    const plugin = await loadPlugin(name);
+    const hook = await v2Hook(plugin);
+    guardFiles.add(path.join(PLUGIN_DIR, name));
+
+    const runEdit = async (sessionID, filePath) => {
+      try {
+        await hook({ tool: "edit", sessionID, input: { filePath } });
+        return null;
+      } catch (err) {
+        return String(err?.message ?? err);
+      }
+    };
+
+    const expectBlocked = async (sessionID, filePath, needle) => {
+      const message = await runEdit(sessionID, filePath);
+      if (!message) {
+        console.error(`FAIL ${plugin.id}: allowed the first code edit: ${filePath}`);
+        failures += 1;
+      } else if (!message.includes(needle)) {
+        console.error(`FAIL ${plugin.id}: blocked ${filePath} without carrying the standard`);
+        failures += 1;
+      } else {
+        console.log(`ok   ${plugin.id}: blocked first edit — ${filePath}`);
+      }
+    };
+
+    const expectAllowed = async (sessionID, filePath, why) => {
+      const message = await runEdit(sessionID, filePath);
+      if (message) {
+        console.error(`FAIL ${plugin.id}: blocked ${why}: ${filePath}`);
+        failures += 1;
+      } else {
+        console.log(`ok   ${plugin.id}: allowed ${why} — ${filePath}`);
+      }
+    };
+
+    await expectBlocked("ses_probe_gate_a", "/tmp/opencode/probe.ts", "Surgical Changes");
+    await expectAllowed("ses_probe_gate_a", "/tmp/opencode/probe.ts", "the retried edit");
+    await expectAllowed("ses_probe_gate_md", "/tmp/opencode/notes.md", "a markdown edit");
+    await expectBlocked("ses_probe_gate_json", "/tmp/opencode/settings.jsonc", "Simplicity First");
+
+    process.env.CODING_STANDARDS_GATE = "off";
+    await expectAllowed("ses_probe_gate_off", "/tmp/opencode/off.ts", "the documented bypass");
+    delete process.env.CODING_STANDARDS_GATE;
+  } catch (err) {
+    console.error(`FAIL ${name}: ${err.message}`);
+    failures += 1;
+  }
+}
+
 // The host must LOAD each guard. A guard that is present in the plugin
 // directory but absent from the running host's plugin list blocks nothing,
 // and the hook-level cases above would still be green.

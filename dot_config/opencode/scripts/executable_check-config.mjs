@@ -255,6 +255,35 @@ function checkDrift() {
   for (const target of targets.sort()) compareTarget(target)
 }
 
+// ---------------------------------------------------------- rule references
+//
+// AGENTS.md is the only file every session reads, so it is also the only index
+// into the conditional rule files. A reference to a moved or renamed file is a
+// rule that silently stops applying; a rule file nobody references is dead
+// weight. Both fail here, where the pre-commit hook sees them.
+
+const AGENTS_MD = join(CONFIG_DIR, "AGENTS.md")
+const RULES_DIR = join(CONFIG_DIR, "docs", "rules")
+
+function checkRuleReferences() {
+  if (!existsSync(AGENTS_MD)) return
+  const text = readFileSync(AGENTS_MD, "utf8")
+  const refs = new Set(text.match(/docs\/[A-Za-z0-9._/-]+\.md/g) ?? [])
+  for (const ref of refs) {
+    if (!existsSync(join(CONFIG_DIR, ref))) fail(`AGENTS.md references a missing file: ${ref}`)
+  }
+  if (text.includes("CODING_STANDARDS.md") && !existsSync(join(CONFIG_DIR, "CODING_STANDARDS.md"))) {
+    fail("AGENTS.md names CODING_STANDARDS.md, but the file is missing")
+  }
+  if (!existsSync(RULES_DIR)) return
+  for (const entry of readdirSync(RULES_DIR)) {
+    if (!entry.endsWith(".md")) continue
+    if (!refs.has(`docs/rules/${entry}`)) {
+      fail(`docs/rules/${entry} is not referenced from AGENTS.md — a rule no session loads is dead weight`)
+    }
+  }
+}
+
 // ------------------------------------------------------------------- install
 
 function install() {
@@ -282,6 +311,7 @@ if (args.includes("--install")) {
 checkParse()
 checkStructure()
 checkDrift()
+checkRuleReferences()
 
 for (const message of warnings) console.warn(`warn: ${message}`)
 if (failures.length > 0) {
