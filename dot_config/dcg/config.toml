@@ -1,13 +1,90 @@
-# Relaxes only the high/medium rules. `rm -rf ~/work` still hard-denies,
-# because core.filesystem:rm-rf-root-home is critical.
-[policy.packs]
-"core.filesystem" = "warn"
+# dcg — Destructive Command Guard, user config.
+# https://github.com/Dicklesworthstone/destructive_command_guard
+#
+# Two traps this file exists to avoid:
+#
+#   1. Critical rules stay critical. A blanket [policy.packs] "warn" does NOT
+#      relax them — dcg raises a broad warn/log back to deny for any critical
+#      rule, silently — so the old blanket-warn bought nothing except noise
+#      on the high/medium rules. Everything below is scoped to one rule id
+#      and, where a path is involved, one path prefix.
+#
+#   2. Regexes live in TOML LITERAL strings ('...'), never basic strings.
+#      A backslash in a basic string ("\s", "\.") is an invalid TOML escape
+#      and dcg drops the whole section without a warning: the rule stops
+#      applying and `dcg config` shows nothing wrong. Single quotes pass the
+#      backslash through verbatim.
+#
+# Every relaxation here was measured against the commands this machine
+# actually got blocked on (69 pending exceptions, 14 unique commands).
 
 [general]
-# The default hook deadline is 1000 ms, and the guard FAILS CLOSED when the
-# evaluation overruns it: on a loaded host a legitimate command was refused
-# with "DCG could not complete safety evaluation within 1000ms". The guard
-# spawns dcg with a 10 s timeout, so 5000 ms of evaluation still fits under
-# it and keeps the protection while removing the false blocks.
+# dcg FAILS CLOSED when evaluation overruns the hook deadline: on a loaded
+# host a legitimate command was refused with "DCG could not complete safety
+# evaluation within 1000ms". The OpenCode bridge spawns dcg with a 10 s
+# timeout, so a 5000 ms evaluation budget still fits under it.
 hook_timeout_ms = 5000
 
+# Record every decision. There was no log file before, so `dcg stats` could
+# only answer "No log file found" and the blocking set could not be profiled.
+log_file = "~/.local/share/dcg/blocked.log"
+
+# ── Path-scoped exemptions ───────────────────────────────────────────────
+# `rm -rf` on a path under $HOME is Critical by design, and dcg auto-allows
+# only literal /tmp and /var/tmp targets. ~/.cache/opencode-scratch is this
+# machine's scratch directory, so it gets an explicit path-scoped exemption
+# instead of the rule being weakened wholesale.
+#
+# The exemption is evaluated inside that one rule's own target check: every
+# other rule still sees the whole command, and only statically literal
+# targets qualify (a "$VAR"-built target never exempts). A compound command
+# still blocks — "rm -rf <scratch>/x && rm -rf ~" is denied — and so does a
+# traversal attempt out of the exempt directory.
+[rules."core.filesystem:rm-rf-root-home"]
+exempt_target_globs = [
+  "~/.cache/opencode-scratch/**",
+  "/home/rodrigo/.cache/opencode-scratch/**",
+  "/tmp/opencode/**",
+]
+
+# ── Downgrades: warn instead of deny ──────────────────────────────────────
+# For the git operations an agent runs constantly, where git can undo the
+# damage from the reflog. The rule still fires and still prints its reason
+# and safer alternatives; the command is not refused.
+#
+# Everything irreversible stays denied: push --force, reset --hard,
+# clean -fdx, branch -D, credential-file writes, mkfs/dd on a device, and
+# rm -rf on $HOME or /.
+[policy.rules]
+"core.git:checkout-discard" = "warn"
+"core.git:checkout-ref-discard" = "warn"
+"core.git:branch-delete" = "warn"
+
+# ── Allow mkfs onto a scratch image file ──────────────────────────────────
+# `system.disk:mkfs` fires on every mkfs, including one that writes a
+# filesystem image under /tmp — the QEMU verity-proof build needs that, and
+# it had to be allowlisted by hand in September.
+#
+# exempt_target_globs does not apply here (mkfs has no target-path check),
+# so this is an explicit command pattern instead. It is anchored at both
+# ends and refuses any /dev argument, any traversal out of /tmp/opencode,
+# and any compound command, so mkfs on a real device stays denied.
+[overrides]
+allow = [
+  '^(?:mkfs(?:\.[a-z0-9]+)?|mke2fs|mkdosfs|mkntfs|mkexfatfs|newfs(?:_[a-z0-9]+)?)\s+(?:(?!\/dev\/)[^\s|;&<>()]+\s+)*\/tmp\/opencode\/(?!\.\.(?:\/|\s|$)|[^\s]*\/\.\.(?:\/|\s|$))[^\s|;&<>()]+$',
+]
+
+[allowlist]
+# The five entries left in ~/.config/dcg/allowlist.toml all expired in
+# September 2026, so `dcg doctor` reported them on every run.
+auto_prune_expired = true
+
+[history]
+# Off by default upstream. On here so `dcg history` and
+# `dcg suggest-allowlist` can answer the question that actually matters:
+# what is blocking me, and is it worth an exception? Commands are stored
+# pattern-redacted and the database is capped.
+enabled = true
+redaction_mode = "pattern"
+retention_days = 30
+max_size_mb = 200
