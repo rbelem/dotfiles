@@ -2,3 +2,12 @@
 # because core.filesystem:rm-rf-root-home is critical.
 [policy.packs]
 "core.filesystem" = "warn"
+
+[general]
+# The default hook deadline is 1000 ms, and the guard FAILS CLOSED when the
+# evaluation overruns it: on a loaded host a legitimate command was refused
+# with "DCG could not complete safety evaluation within 1000ms". The guard
+# spawns dcg with a 10 s timeout, so 5000 ms of evaluation still fits under
+# it and keeps the protection while removing the false blocks.
+hook_timeout_ms = 5000
+
