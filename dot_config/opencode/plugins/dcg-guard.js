@@ -22,7 +22,24 @@
 // `node:child_process` rather than `Bun.spawn`: v2 migrated Bun -> Node, so
 // `Bun` is undefined there, while Bun implements the `node:` modules — so the
 // one spawn path works under both runtimes.
+//
+// LOCAL PATCH (2026-10-20) — upstream v0.15.3 gates the v2 hook on
+// `event.tool !== "bash"`, but the model-facing shell tool in OpenCode v2 is
+// named `shell` (there is no `bash` tool). The predicate was therefore
+// always true, the hook returned early, and dcg never guarded a single
+// command while the global AGENTS.md documents the block as active. The
+// patch accepts both tool names. It lives in the chezmoi source, which is the
+// source of truth: after any `dcg install --opencode` run `chezmoi apply` to
+// restore it, and re-check this clause when dcg is updated.
+// Upstream reference: the v2 hook shape is documented at
+// https://github.com/Dicklesworthstone/destructive_command_guard (v0.15.3).
 import { spawnSync } from "node:child_process";
+
+// The shell tool is `shell` in OpenCode v2 and `bash` in v1. Both must be
+// accepted or the guard never fires.
+function isShellTool(tool) {
+  return tool === "shell" || tool === "bash";
+}
 
 const DCG_BIN = "/nix/store/58xvmzwfl7j74zl1v3ii7smvjgmzkx57-dcg-0.15.3/bin/dcg";
 
@@ -109,7 +126,7 @@ function dcgDenyReason(command) {
 function v1Hooks() {
   return {
     "tool.execute.before": async (input, output) => {
-      if (!input || input.tool !== "bash") return;
+      if (!input || !isShellTool(input.tool)) return;
       const reason = dcgDenyReason(output?.args?.command);
       if (reason) throw new Error(reason);
     },
@@ -126,7 +143,7 @@ export default {
   // OpenCode v2: `setup(ctx)` registers the hook, command in `event.input`.
   async setup(ctx) {
     await ctx.tool.hook("execute.before", async (event) => {
-      if (!event || event.tool !== "bash") return;
+      if (!event || !isShellTool(event.tool)) return;
       const reason = dcgDenyReason(event.input && event.input.command);
       if (reason) throw new Error(reason);
     });

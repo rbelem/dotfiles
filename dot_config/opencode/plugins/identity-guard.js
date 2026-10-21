@@ -18,6 +18,13 @@
 // One file serves OpenCode v1 (hook map via server()) and v2
 // (default {id, setup(ctx)} that registers ctx.tool.hook("execute.before", cb)),
 // the same shape as the generated dcg-guard plugin.
+//
+// TOOL NAME: the model-facing shell tool is named `shell` in OpenCode v2;
+// `bash` is the v1 internal name. A guard that only accepts `bash` is inert
+// in v2 — the predicate is always true, the hook returns early, and the
+// guard never runs while the global AGENTS.md documents it as active.
+// Both names are accepted on both paths. scripts/probe-guards.mjs asserts
+// that the v2 path blocks.
 
 const BYPASS = "IDENTITY_GUARD_BYPASS=1";
 
@@ -29,6 +36,12 @@ const OVERRIDE = new RegExp(
   String.raw`\bgit\b[^\n;&|]*-c\s+user\.(?:name|email)=` +
     String.raw`|(?:^|[\s;&|(])(?:GIT_AUTHOR|GIT_COMMITTER)_(?:NAME|EMAIL)=`,
 );
+
+// The shell tool is `shell` in OpenCode v2 and `bash` in v1. Both must be
+// accepted or the guard never fires.
+function isShellTool(tool) {
+  return tool === "shell" || tool === "bash";
+}
 
 // Returns a deny reason, or null to allow.
 export function identityOverrideReason(command) {
@@ -49,7 +62,7 @@ export function identityOverrideReason(command) {
 function v1Hooks() {
   return {
     "tool.execute.before": async (input, output) => {
-      if (!input || input.tool !== "bash") return;
+      if (!input || !isShellTool(input.tool)) return;
       const reason = identityOverrideReason(output?.args?.command);
       if (reason) throw new Error(reason);
     },
@@ -61,7 +74,7 @@ export default {
   server: async () => v1Hooks(),
   async setup(ctx) {
     await ctx.tool.hook("execute.before", async (event) => {
-      if (!event || event.tool !== "bash") return;
+      if (!event || !isShellTool(event.tool)) return;
       const reason = identityOverrideReason(event.input && event.input.command);
       if (reason) throw new Error(reason);
     });
