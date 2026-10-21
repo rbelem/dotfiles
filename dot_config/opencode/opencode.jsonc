@@ -236,8 +236,13 @@
     // agentmemory-capture and autolearn were retired 2026-10-16. Both engines
     //   were dead and upstreams exist. The devbox.d/agentmemory entry is gone.
     //   dcg-guard.js is upstream generated. It comes from `dcg install
-    //   --opencode`, so do not edit it. The hand-written dcg-guard.ts was
-    //   deleted 2026-10-16. The generated copy loads and the local one failed.
+    //   --opencode`, so do not edit the LIVE copy — the chezmoi source holds
+    //   a one-clause LOCAL PATCH (upstream gates the v2 hook on the tool name
+    //   `bash`, but the v2 shell tool is named `shell`, so the guard never
+    //   ran). Run `chezmoi apply` after `dcg install --opencode` to restore
+    //   the patch; scripts/probe-guards.mjs asserts it is alive.
+    //   The hand-written dcg-guard.ts was deleted 2026-10-16. The generated
+    //   copy loads and the local one failed.
     //   model-announcer was retired 2026-10-16. Native v2 covers it.
     // deferred (no V2 support upstream): @slkiser/opencode-quota (TUI-heavy),
     //   @tarquinen/opencode-smart-title (superseded by native title agent)

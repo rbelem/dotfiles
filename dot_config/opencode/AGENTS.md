@@ -34,6 +34,22 @@ advice, it is the contract the reviewer holds you to — §4's plan format
 `[complexity-guard]` violations appended to your write/edit results) both
 apply to you.
 
+**The two rules that actually bite, inlined so they are in context while you
+implement** (the full file still wins):
+
+- **Surgical changes** — touch only what the request requires. Do not
+  "improve" adjacent code, comments or formatting; do not refactor what is
+  not broken; match the existing style even if you would write it
+  differently. Mention unrelated dead code, do not delete it unasked. Remove
+  only the imports and variables YOUR change orphaned. Every changed line
+  traces to the request.
+- **Plan format** — for multi-step work, write the plan before the first
+  edit, one verifiable step per line: `1. [Step] → verify: [check]`. Make
+  each step verifiable ("add validation" → write the failing test, then make
+  it pass). Report the strength of the evidence with the claim — n=1 when it
+  is one observation, and retract it out loud when a wider sample
+  contradicts it.
+
 ## Commit Identity (never override)
 
 The `identity-guard` plugin blocks `git -c user.name=…`, `GIT_AUTHOR_*`, and
@@ -133,11 +149,31 @@ Three sources that mislead:
 traps (`/doc` is the SPA, not a spec). Read it before spelunking upstream
 source or guessing an endpoint.
 
+**The shell tool is named `shell`.** `bash` is the v1 internal name — calling
+a `bash` tool fails with "No tool named 'bash' is currently available". A
+guard plugin must accept both names (`tool !== "bash" && tool !== "shell"`),
+or it is inert in v2: the predicate is always true, the hook returns early
+and nothing is guarded. `scripts/probe-guards.mjs` asserts this.
+
 ## Long-running commands
 
 Anything over ~5 minutes goes to `background: true` with an explicit
 `timeout`. A foreground call dies with the server and takes its output with
 it; a background call survives and still notifies you.
+
+**Never poll a background job.** The completion notification arrives on its
+own; a `sleep` loop that re-reads the output file is pure waste (a past
+session burned ~31 minutes that way). The `poll-guard` plugin rejects
+`sleep` of 30s or more in the shell tool for exactly this reason —
+`POLL_GUARD_BYPASS=1` is the escape hatch.
+
+## Scratch space
+
+Scratch belongs on `/home`, not on the root fs: `/` is 96 G and holds `/nix`,
+so it fills up long before it looks full — a build that needs 2 G fails with
+ENOSPC while `df` still shows room on `/home`. `~/.cache/opencode-scratch` is
+the scratch root (234 G); `/tmp/opencode` holds symlinks into it for the
+paths that already existed, so old paths keep resolving.
 
 ## Session transcripts
 
