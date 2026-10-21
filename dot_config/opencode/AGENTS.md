@@ -141,6 +141,16 @@ Three sources that mislead:
   `https://skills.sh/api/search?q=<query>` list every published skill. Search
   there before hunting GitHub or npm.
 
+## Shell calls
+
+Pass `workdir` instead of prefixing the command with `cd` — the tool takes the
+path, and a `cd` prefix breaks when the working directory moves under a
+background job.
+
+Cap a command's output at ~8 KB unless the full text is the point
+(`| head -c 8000`). `rtk` compresses the common commands (`git`, `gh`, `ls`);
+`sqlite3` dumps and `grep -rn` sweeps are not covered, so trim those yourself.
+
 ## Opencode itself
 
 `~/.config/opencode/docs/opencode-cli-api.md` — the read-only CLI
