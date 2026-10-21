@@ -1,13 +1,15 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  // Budget mode (2026-10-15): OpenCode Go is the only paid route. Main model
-  // + title + compactor all go through opencode-go; the Go-only agent team
-  // lives in the "budget" preset of oh-my-opencode-slim.jsonc.
-  // Muse Spark 1.3 Contributor (data-use tier) drives the main session since
-  // 2026-10-15 — note: on V2 hosts the MAIN session model is the root `model`
-  // below, not the preset's orchestrator entry (that entry drives the
-  // agent-config + fallback chain: deepseek-v4.1-flash → muse → glm-5.3-flash
-  // → mimo-v2.6-flash).
+  // Budget mode (2026-10-15, revised 2026-10-21). OpenCode Go+ is the metered
+  // route: every model on it carries a rolling allowance (5h = 20% of monthly,
+  // weekly = 50%, monthly = 100%). Muse Spark 1.3 Contributor (data-use tier)
+  // drives the main session since 2026-10-15 — on V2 hosts the MAIN session
+  // model is the root `model` below, not the preset's orchestrator entry.
+  // Title, compaction and summary run on the zero-quota MiniMax M3.1 Flash
+  // Free. The agent team lives in the "default" preset of
+  // oh-my-opencode-slim.jsonc, where each chain now puts a zero-quota model
+  // and a flat-plan model (zai-coding-plan, alibaba-token-plan) ahead of the
+  // paid Go models, which stay as fallbacks only.
   "model": "opencode-go/muse-spark-1.3-contributor",
   "variant": "high",
   "providers": {
@@ -274,7 +276,7 @@
     {
       "package": "github:rbelem/opencode-optchat#1b38517bc19d2506dcc4ef8defab2e63fbce1a14",
       "options": {
-        "compactorModel": { "providerID": "opencode-go", "id": "muse-spark-1.3-contributor" }
+        "compactorModel": { "providerID": "opencode-go", "id": "minimax-m3.1-flash-free" }
       }
     },
     // opencode-supervisor (npm, v0.1.0 by vimtor, audited 2026-10-20):
