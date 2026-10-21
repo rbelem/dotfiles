@@ -12,6 +12,17 @@
 // its real v2 hook with the v2 event shape ({tool, input}), and asserts that
 // what must be blocked is blocked and what must pass passes.
 //
+// It also asserts the host LOADS each guard: a guard that sits in the plugin
+// directory but is not loaded by the running host blocks nothing, and the
+// hook-level cases above stay green. `opencode plugin list` is the host's own
+// answer to "is this plugin active", so the probe reads it.
+//
+// That listing has two sources: the running server's plugin registry and the
+// TUI's local directory discovery. The registry can come back EMPTY while
+// the server is still booting, and an empty registry looks exactly like "the
+// guards are not loaded". So the probe retries and only judges the listing
+// once the server has actually answered.
+//
 // Usage: node ~/.config/opencode/scripts/probe-guards.mjs
 // Exit 0: every guard behaved as documented. Exit 1: a guard is inert.
 
@@ -19,6 +30,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const PLUGIN_DIR = path.join(os.homedir(), ".config/opencode/plugins");
 
@@ -92,12 +104,14 @@ async function attempt(hook, command, tool) {
 }
 
 let failures = 0;
+const guardFiles = new Set();
 
 for (const testCase of CASES) {
   let plugin;
   let hook;
   try {
     plugin = await loadPlugin(testCase.plugin);
+    guardFiles.add(path.join(PLUGIN_DIR, testCase.plugin));
     hook = await v2Hook(plugin);
   } catch (err) {
     console.error(`FAIL ${testCase.plugin}: ${err.message}`);
@@ -128,9 +142,65 @@ for (const testCase of CASES) {
   }
 }
 
+// The host must LOAD each guard. A guard that is present in the plugin
+// directory but absent from the running host's plugin list blocks nothing,
+// and the hook-level cases above would still be green.
+const HOST_PROBE_ATTEMPTS = 3;
+const HOST_PROBE_DELAY_MS = 400;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// A server-side plugin row is a FILE (.js/.ts); the TUI rows are directories.
+// So a file row is the proof that the server answered with its registry.
+function serverRows(output) {
+  return output
+    .split("\n")
+    .slice(1)
+    .filter((line) => /\.[cm]?[jt]sx?$/.test(line.trim()));
+}
+
+async function hostPluginList() {
+  let output = "";
+  for (let attempt = 1; attempt <= HOST_PROBE_ATTEMPTS; attempt++) {
+    output = execFileSync("opencode", ["plugin", "list"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    if (serverRows(output).length > 0) return output;
+    if (attempt < HOST_PROBE_ATTEMPTS) await sleep(HOST_PROBE_DELAY_MS);
+  }
+  return output;
+}
+
+let hostList = null;
+try {
+  hostList = await hostPluginList();
+} catch (err) {
+  console.error(`FAIL host: could not run \`opencode plugin list\`: ${err.message}`);
+  failures += 1;
+}
+
+if (hostList !== null) {
+  if (serverRows(hostList).length === 0) {
+    console.error(
+      `FAIL host: the host reported no server-side plugins after ${HOST_PROBE_ATTEMPTS} attempts — the guards cannot be confirmed`,
+    );
+    failures += 1;
+  } else {
+    for (const file of guardFiles) {
+      if (hostList.includes(file)) {
+        console.log(`ok   host: loads ${file}`);
+      } else {
+        console.error(`FAIL host: does not load ${file} — the guard is inert in the running host`);
+        failures += 1;
+      }
+    }
+  }
+}
+
 if (failures > 0) {
   console.error(`probe-guards: FAILED — ${failures} guard expectation(s) not met`);
   process.exit(1);
 }
 
-console.log("probe-guards: ok — every guard blocks what it must and passes what it must");
+console.log("probe-guards: ok — every guard blocks what it must, passes what it must, and the host loads it");
