@@ -1,0 +1,6 @@
+[Unit]
+Description=Check the agent config guardrails (hook-level probes + source drift)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/opencode/scripts/guard-check.sh

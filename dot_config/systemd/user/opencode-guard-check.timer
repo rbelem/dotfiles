@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily guardrail check for the agent config tree
+
+[Timer]
+OnCalendar=*-*-* 06:10:00
+RandomizedDelaySec=10m
+Persistent=true
+Unit=opencode-guard-check.service
+
+[Install]
+WantedBy=timers.target
