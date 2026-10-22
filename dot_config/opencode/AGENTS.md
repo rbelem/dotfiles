@@ -67,3 +67,9 @@ Everything here is chezmoi-managed. Edit the source at
 pre-commit hook rejects the commit.
 `node ~/.config/opencode/scripts/check-config.mjs` verifies parse, structure,
 drift, and that every file named above still exists.
+A tool that regenerates a live file (dcg install rewrote a patched guard) makes
+`chezmoi apply` refuse it, and it fails without a TTY: restore the source with
+`chezmoi apply --force <path>`.
+After editing a plugin or a guard script, run
+`node ~/.config/opencode/scripts/probe-guards.mjs` and only then the live copy,
+so a stale live version does not answer as the old one.

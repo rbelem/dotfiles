@@ -169,11 +169,17 @@
       "cua": {
         "type": "local",
         "command": [
-          "cua",
-          "mcp"
+          "cua", "mcp"
         ],
         "disabled": false
-      }
+      },
+      "cua-driver": {
+        "type": "local",
+        "command": [
+          "cua-driver", "mcp"
+        ],
+        "disabled": false
+      },
     },
   },
   "permissions": [

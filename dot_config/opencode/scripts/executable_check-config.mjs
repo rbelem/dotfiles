@@ -226,7 +226,14 @@ function compareTarget(targetRel) {
     return
   }
   if (readFileSync(live, "utf8") !== sourceText) {
-    fail(`drift: ${targetRel} differs from the chezmoi source — run: chezmoi add ${targetRel}`)
+    // Name both recoveries. The source is truth by default: a tool that
+    // regenerates a live file (dcg install rewrote a patched guard) must not
+    // be adopted silently, so the first line restores the source and the
+    // second states the deliberate alternative.
+    fail(
+      `drift: ${targetRel} differs from the chezmoi source — restore it: chezmoi apply --force ${targetRel}` +
+        ` (only if the live change is the intended one: chezmoi add ${targetRel})`,
+    )
   }
   if (source.prefix === "executable_") {
     const mode = liveStats.mode & 0o777

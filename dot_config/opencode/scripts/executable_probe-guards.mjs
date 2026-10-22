@@ -23,8 +23,17 @@
 // guards are not loaded". So the probe retries and only judges the listing
 // once the server has actually answered.
 //
-// Usage: node ~/.config/opencode/scripts/probe-guards.mjs
+// Usage: node ~/.config/opencode/scripts/probe-guards.mjs [--no-host]
 // Exit 0: every guard behaved as documented. Exit 1: a guard is inert.
+//
+// --no-host skips the "does the running host load this plugin" section, which
+// needs a live host and therefore cannot run unattended (the daily timer uses
+// this mode). The hook-level checks and the drift check still run.
+//
+// Any guard that PERSISTS state (the standards gate writes a per-session
+// marker) makes a probe order-dependent: a marker from an earlier run
+// legitimately suppresses the block it is asserting. Such a guard's cases must
+// use session ids unique to the run.
 
 import fs from "node:fs";
 import os from "node:os";
@@ -33,6 +42,7 @@ import { pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const PLUGIN_DIR = path.join(os.homedir(), ".config/opencode/plugins");
+const NO_HOST = process.argv.includes("--no-host");
 
 // The guards must block under the v2 tool name AND under the v1 name.
 const TOOL_NAMES = ["shell", "bash"];
@@ -183,13 +193,32 @@ for (const testCase of CASES) {
       }
     };
 
-    await expectBlocked("ses_probe_gate_a", "/tmp/opencode/probe.ts", "Surgical Changes");
-    await expectAllowed("ses_probe_gate_a", "/tmp/opencode/probe.ts", "the retried edit");
-    await expectAllowed("ses_probe_gate_md", "/tmp/opencode/notes.md", "a markdown edit");
-    await expectBlocked("ses_probe_gate_json", "/tmp/opencode/settings.jsonc", "Simplicity First");
+    // Delivery is persisted per session, so the ids must be unique per run:
+    // a marker from an earlier probe would legitimately suppress the block.
+    const run = `${Date.now().toString(36)}_${process.pid}`;
+    const sessionA = `ses_probe_gate_a_${run}`;
+    const sessionJson = `ses_probe_gate_json_${run}`;
+
+    await expectBlocked(sessionA, "/tmp/opencode/probe.ts", "Surgical Changes");
+    await expectAllowed(sessionA, "/tmp/opencode/probe.ts", "the retried edit");
+    await expectAllowed(`ses_probe_gate_md_${run}`, "/tmp/opencode/notes.md", "a markdown edit");
+    await expectBlocked(sessionJson, "/tmp/opencode/settings.jsonc", "Simplicity First");
+
+    // The marker is what survives a host restart; assert it was written.
+    const marker = path.join(
+      os.homedir(),
+      ".local/state/opencode/coding-standards-gate",
+      sessionA.replace(/[^A-Za-z0-9_-]/g, "_"),
+    );
+    if (fs.existsSync(marker)) {
+      console.log(`ok   ${plugin.id}: delivery marker persisted for the session`);
+    } else {
+      console.error(`FAIL ${plugin.id}: no delivery marker at ${marker} — a restart would re-block`);
+      failures += 1;
+    }
 
     process.env.CODING_STANDARDS_GATE = "off";
-    await expectAllowed("ses_probe_gate_off", "/tmp/opencode/off.ts", "the documented bypass");
+    await expectAllowed(`ses_probe_gate_off_${run}`, "/tmp/opencode/off.ts", "the documented bypass");
     delete process.env.CODING_STANDARDS_GATE;
   } catch (err) {
     console.error(`FAIL ${name}: ${err.message}`);
@@ -228,11 +257,13 @@ async function hostPluginList() {
 }
 
 let hostList = null;
-try {
-  hostList = await hostPluginList();
-} catch (err) {
-  console.error(`FAIL host: could not run \`opencode plugin list\`: ${err.message}`);
-  failures += 1;
+if (!NO_HOST) {
+  try {
+    hostList = await hostPluginList();
+  } catch (err) {
+    console.error(`FAIL host: could not run \`opencode plugin list\`: ${err.message}`);
+    failures += 1;
+  }
 }
 
 if (hostList !== null) {
@@ -258,4 +289,8 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log("probe-guards: ok — every guard blocks what it must, passes what it must, and the host loads it");
+console.log(
+  NO_HOST
+    ? "probe-guards: ok — every guard blocks what it must and passes what it must (host check skipped)"
+    : "probe-guards: ok — every guard blocks what it must, passes what it must, and the host loads it",
+);

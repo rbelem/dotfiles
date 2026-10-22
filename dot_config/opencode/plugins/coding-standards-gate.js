@@ -13,11 +13,16 @@
 // Scope: write/edit on a path whose extension or basename is code, config, or a
 // script. Markdown, images, data dumps, and logs pass untouched.
 // Escape hatch: CODING_STANDARDS_GATE=off.
-import { readFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
 const STANDARDS = join(homedir(), ".config", "opencode", "CODING_STANDARDS.md");
+// Delivery is recorded on disk per session: the host restarts often enough that
+// an in-memory Set re-denied the same session's edits (three times in one run),
+// and one of those re-denials fed a retry loop. Markers are tiny and pruned.
+const STATE_DIR = join(homedir(), ".local", "state", "opencode", "coding-standards-gate");
+const MARKER_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 const CODE_EXTENSIONS = new Set([
   // languages
@@ -41,9 +46,57 @@ const CODE_NAMES = new Set([
   ".dockerignore",
 ]);
 
-// Sessions that already received the standard. One denial per session, not one
-// per file: after the first read the contract is in context for the rest of it.
+// Sessions that already received the standard, in this process. One denial per
+// session, not one per file: after the first read the contract is in context.
 const delivered = new Set();
+
+/** Marker filename for a session id (ids are opaque; keep them path-safe). */
+function markerPath(session) {
+  return join(STATE_DIR, String(session).replace(/[^A-Za-z0-9_-]/g, "_"));
+}
+
+/** Identity of the standards text, so editing the standard re-arms the gate.
+ * mtime plus size is one stat, cheap enough to run per code edit. */
+async function standardsVersion() {
+  const info = await stat(STANDARDS).catch(() => null);
+  return info ? `${info.mtimeMs}:${info.size}` : null;
+}
+
+/** True when an earlier host process delivered THIS version of the standard. */
+async function deliveredBefore(session) {
+  const version = await standardsVersion();
+  if (!version) return false;
+  try {
+    const marker = JSON.parse(await readFile(markerPath(session), "utf8"));
+    return marker?.version === version;
+  } catch {
+    return false;
+  }
+}
+
+/** Drop markers older than the TTL so the directory stays bounded. */
+async function pruneMarkers(now = Date.now()) {
+  const names = await readdir(STATE_DIR).catch(() => []);
+  await Promise.all(
+    names.map(async (name) => {
+      const p = join(STATE_DIR, name);
+      const info = await stat(p).catch(() => null);
+      if (info && now - info.mtimeMs > MARKER_TTL_MS) await rm(p, { force: true }).catch(() => {});
+    }),
+  );
+}
+
+async function markDelivered(session) {
+  const version = await standardsVersion();
+  if (!version) return;
+  try {
+    await mkdir(STATE_DIR, { recursive: true });
+    await writeFile(markerPath(session), JSON.stringify({ at: new Date().toISOString(), version }));
+    await pruneMarkers();
+  } catch {
+    // Best-effort: an unwritable state dir must never wedge every edit.
+  }
+}
 
 /** True when editing `filePath` counts as writing code, config, or a script. */
 export function isCodeTarget(filePath) {
@@ -70,10 +123,15 @@ export async function gateReason(event) {
   if (!isCodeTarget(filePath)) return null;
   const session = event.sessionID ?? "unknown";
   if (delivered.has(session)) return null;
+  if (await deliveredBefore(session)) {
+    delivered.add(session);
+    return null;
+  }
   delivered.add(session);
   const standards = await readFile(STANDARDS, "utf8").catch(() => null);
   // Never block on a missing file: a broken path must not wedge every edit.
   if (!standards) return null;
+  await markDelivered(session);
   return (
     `[coding-standards] ${filePath} is code, config, or a script. ` +
     `CODING_STANDARDS.md is the contract for this session — read it, then retry ` +
