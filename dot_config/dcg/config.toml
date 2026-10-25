@@ -43,6 +43,8 @@ log_file = "~/.local/share/dcg/blocked.log"
 [rules."core.filesystem:rm-rf-root-home"]
 exempt_target_globs = [
   "~/.cache/**",
+  "~/.local/share/Trash/**",
+  "/home/rodrigo/.local/share/Trash/**",
   "/tmp/**",
 ]
 
@@ -58,6 +60,12 @@ exempt_target_globs = [
 "core.git:checkout-discard" = "warn"
 "core.git:checkout-ref-discard" = "warn"
 "core.git:branch-delete" = "warn"
+# mv with a variable-built path is High, so a warn downgrade is honored here
+# (unlike for Critical rules). Both real hits were same-directory renames.
+# The dangerous shapes stay denied behind Critical rules that this does not
+# touch: mv-sensitive-source-root-home and credential-file-write still block
+# /etc, ~/.ssh, and /home-tree sources moved out (verified 2026-10-23).
+"core.filesystem:mv-dynamic-path" = "warn"
 
 # ── Allow mkfs onto a scratch image file ──────────────────────────────────
 # `system.disk:mkfs` fires on every mkfs, including one that writes a

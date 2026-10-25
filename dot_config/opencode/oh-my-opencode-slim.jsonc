@@ -166,6 +166,13 @@
       },
       "skills": [],
       "mcps": ["*"]
+    },
+    "poteto-agent": {
+      // V2 renames the V1 `task` stance to the `subagent` action. Declaring
+      // it here makes applyDefaultPermissions skip the
+      // TASK_NO_NESTED_DISPATCH deny (task: {"*": "deny"}) it otherwise
+      // injects into every non-orchestrator agent.
+      "permission": { "task": "allow" }
     }
   },
   "multiplexer": {
