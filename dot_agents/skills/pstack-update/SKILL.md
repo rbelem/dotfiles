@@ -53,32 +53,36 @@ description: Update the rbelem/skills pstack fork (OpenCode port of poteto's pst
    - Fix the `name:` frontmatter to match. (Currently no other pstack file references them by path.)
    - Same rule for any NEW upstream skill colliding with a lock-tracked name: prefix `pstack-`.
 
-5. **Slug rule**: every skill's `name:` frontmatter must equal its directory name. Check:
+5. **New upstream skill checklist** — beyond the copy and the slug rule, a new upstream skill that ships `disable-model-invocation: true` also needs a `commands/<name>.md` wrapper in the fork, because OpenCode has no slash menu and the wrapper is what makes the skill user-invocable (principles and `recall` excepted; those drop the frontmatter flag instead). Upstream v0.15.29 added `create-formal-verification-skill` and `maintain-formal-verification-skill`, both user-invoked, so the fork shipped `commands/create-formal-verification-skill.md` and `commands/maintain-formal-verification-skill.md` alongside them. A new upstream skill may also reference a sibling by slash name (`/maintain-formal-verification-skill`), so ship both the skill and its wrapper in the same pass.
+
+6. **Slug rule**: every skill's `name:` frontmatter must equal its directory name. Check:
 
    ```bash
    cd ~/Workspace/github.com/rbelem/skills/pstack/skills
    for f in */SKILL.md; do d=$(dirname "$f"); n=$(grep -m1 "^name:" "$f" | sed 's/^name: *//; s/"//g'); [ "$d" != "$n" ] && echo "$f -> '$n'"; done
    ```
 
-6. **Verify zero Cursor, retired-slug, and retired-delegate residue** (the fork's `README.md` documents the substitutions and is excluded; must return nothing else):
+7. **Verify zero Cursor, retired-slug, and retired-delegate residue** (the fork's `README.md` documents the substitutions and is excluded; must return nothing else):
 
    ```bash
    grep -rn "\.cursor/\|AskQuestion\|cursor-team-kit\|deslop\|grok-\|claude-\|cursor-grok\|composer-\|subagent_type: general" --include="*.md" --exclude=README.md ~/Workspace/github.com/rbelem/skills/pstack/
    ```
 
-7. **Commit + push the fork repo** — stage ONLY `pstack/` and `pstack-update/`; the repo carries unrelated uncommitted work (benchmark-model-preset). Never `git add -A`. Do not amend/rebase.
+8. **Commit + push the fork repo** — stage ONLY `pstack/` and `pstack-update/`; the repo carries unrelated uncommitted work (benchmark-model-preset). Never `git add -A`. Do not amend/rebase.
 
-8. **Reinstall via the skills CLI** (fork is the lock source, so update flows from it):
+9. **Reinstall via the skills CLI** (fork is the lock source, so update flows from it) — one `skills add` per changed or new skill, because `skills update` cannot apply `pstack/skills/*` entries:
 
    ```bash
-   skills update <changed skill names> -g -y   # or: skills update -g -y for all
+   for s in <changed-and-new-skill-names>; do
+     skills add https://github.com/rbelem/skills.git --skill "$s" --full-depth -g -y < /dev/null
+   done
    ```
 
 - After a `cp`/re-port, re-check BOTH the slug rule AND frontmatter regressions: upstream v0.14.8+ ships title-case `name:` ("Make Bot UI") instead of slugs, and re-copying clobbers fork-specific frontmatter (`unslop`'s `metadata: opencode/autoinvoke: "true"`, `pstack-tdd`/`pstack-teach` names).
 - Mechanical regexes can't recover the fork's hand-written adaptation phrasings. Before copying over, extract the old fork's phrasing from `git show HEAD:pstack/...` for: `agent-transcripts/`/`~/.cursor/projects` lines, `control-cli`/`control-ui` lines, `deslop`/`cursor-team-kit` lines, `create-skill` lines, `Cursor cloud agent`/dashboard lines, `/loop` lines. Re-apply them verbatim in a second pass, then residue-grep the `.md` files (leave `api2.cursor.sh` webhook URL in make-bot-ui and `environment: "cloud"` in swarm + worktree-audit.sh — fork precedent).
 - Prefer the patch flow over wholesale `cp`: in a fresh clone, find the fork's base commit (`git log --until=<port-date> -- pstack`; upstream has no tags, version lives in `pstack/.cursor-plugin/plugin.json`), write `git diff <base>..HEAD -- pstack/skills pstack/agents` to a patch, and `git apply --reject` it in the fork repo. Cleanly-applied hunks land untouched and the reject set is exactly the substituted files; resolve each by overwriting with the sed-substituted upstream version, then re-applying the fork phrasings line-by-line using `git show HEAD:` (old) vs the substituted file (new) as a resid diff. Note dcg blocks `git checkout`/`git restore` — never compound the apply; verify totals instead of resetting.
 - Upstream renames tokens between versions: v0.15.x renamed the rules file `pstack-models.md` → `pstack-models.mdc` and added `disable-model-invocation: true` frontmatter. After porting, also sweep for NEW upstream token forms (`.mdc`, title-case `name:`) and fresh "Cursor" product references (e.g. "If Cursor also exposes"), not just the substitution table's old forms.
-- After a re-port, restore the fork's spawn routing. Upstream ships Cursor model slugs and a `general`-style delegate in `poteto-mode` (both defaults plus the hardest-model mention), every playbook's `(default <slug>)`, the `how`, `why`, `swarm`, `architect`, `arena`, `interrogate`, and `reflect` spawn lines, and `setup-pstack`'s budget labels and example table. Re-apply per `pstack/README.md` → Agent seats and model routing: playbook code delegates and panel runners/workers spawn `fixer`, judges/reviewers and judgment prose spawn `oracle`, reconnaissance spawns `explorer`, and the `why`/`reflect` evidence roles spawn `investigator`. Keep spawns provider-generic: every spawn omits `model` unless the user's `pstack-models.md` override sets one. Drop `-fast`/speed wording in favor of the `#variant` mechanics, and run the step 6 grep (it includes the retired slugs).
+- After a re-port, restore the fork's spawn routing. Upstream ships Cursor model slugs and a `general`-style delegate in `poteto-mode` (both defaults plus the hardest-model mention), every playbook's `(default <slug>)`, the `how`, `why`, `swarm`, `architect`, `arena`, `interrogate`, and `reflect` spawn lines, and `setup-pstack`'s budget labels and example table. Re-apply per `pstack/README.md` → Agent seats and model routing: playbook code delegates and panel runners/workers spawn `fixer`, judges/reviewers and judgment prose spawn `oracle`, reconnaissance spawns `explorer`, and the `why`/`reflect` evidence roles spawn `investigator`. Keep spawns provider-generic: every spawn omits `model` unless the user's `pstack-models.md` override sets one. Drop `-fast`/speed wording in favor of the `#variant` mechanics, and run the step 7 grep (it includes the retired slugs).
 - `skills update -g -y` cannot apply updates for `pstack/skills/*` entries (v1.6.0): its apply phase re-clones with shallow discovery, finds only root-level skills, and reports "No matching skills found". Reinstall per skill instead: `skills add https://github.com/rbelem/skills.git --skill <name> --full-depth -g -y < /dev/null`. Redirect stdin or the CLI's prompt machinery eats the rest of a `while read` list. If a per-skill add exits non-zero citing PromptScript, the store update still landed; verify with `diff -rq` against the fork rather than trusting the exit code.
 
 ## Gotchas

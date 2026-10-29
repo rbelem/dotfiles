@@ -276,13 +276,5 @@
   "lsp": true,
   "instructions": [
     "~/.autolearn/personas/default/memory.context.md"
-  ],
-  "agent": {
-    "explore": {
-      "disable": true
-    },
-    "general": {
-      "disable": true
-    }
-  }
+  ]
 }
