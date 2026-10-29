@@ -9,7 +9,9 @@
   },
   "experimental": {
     "background_compaction": true,
-    "image_generate": true,
+    "image_generate": {
+      "model": "openrouter/google/gemini-nano-banana-2.1"
+    },
     "portable_shell_scanner": true,
     "subagent_depth": 5,
     "todo": true
@@ -170,6 +172,13 @@
         ],
         "disabled": false
       },
+      "nixos": {
+        "type": "local",
+        "command": [
+          "mcp-nixarchy"
+        ],
+        "disabled": false,
+      }
     },
   },
   "permissions": [

@@ -173,8 +173,9 @@ function checkStructure() {
     return // already reported by checkParse
   }
   for (const [key, value] of Object.entries(config.experimental ?? {})) {
-    if (typeof value !== "boolean" && typeof value !== "number") {
-      fail(`opencode.jsonc: experimental.${key} must be a boolean or number, got ${typeof value}`)
+    const isSetting = value !== null && typeof value === "object" && !Array.isArray(value)
+    if (typeof value !== "boolean" && typeof value !== "number" && !isSetting) {
+      fail(`opencode.jsonc: experimental.${key} must be a boolean, number, or settings object, got ${typeof value}`)
     }
   }
   for (const entry of config.plugins ?? []) {
