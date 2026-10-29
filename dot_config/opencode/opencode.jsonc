@@ -10,7 +10,7 @@
   "experimental": {
     "background_compaction": true,
     "image_generate": {
-      "model": "openrouter/google/gemini-nano-banana-2.1"
+      "model": "opencode/gpt-image-2.5-sunburst"
     },
     "portable_shell_scanner": true,
     "subagent_depth": 5,

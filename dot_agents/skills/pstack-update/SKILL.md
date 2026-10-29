@@ -68,7 +68,7 @@ description: Update the rbelem/skills pstack fork (OpenCode port of poteto's pst
    grep -rn "\.cursor/\|AskQuestion\|cursor-team-kit\|deslop\|grok-\|claude-\|cursor-grok\|composer-\|subagent_type: general" --include="*.md" --exclude=README.md ~/Workspace/github.com/rbelem/skills/pstack/
    ```
 
-8. **Commit + push the fork repo** — stage ONLY `pstack/` and `pstack-update/`; the repo carries unrelated uncommitted work (benchmark-model-preset). Never `git add -A`. Do not amend/rebase.
+8. **Commit + push the fork repo** — stage ONLY `pstack/` and `pstack-update/`; the repo carries unrelated uncommitted work (benchmark-model-preset). Never `git add -A`. Do not amend/rebase. Before committing, run `scripts/test-pstack.sh` — it installs the two scripts trees' dependencies and runs `node --test` (statechart, 334 tests, TLC ones need `TLA2TOOLS`; the script realises `nixpkgs#tlaplus` itself), `bun test` (poteto-mode) and the `tsc --strict` typecheck. A re-port that breaks a ported test should not be committed.
 
 9. **Reinstall via the skills CLI** (fork is the lock source, so update flows from it) — one `skills add` per changed or new skill, because `skills update` cannot apply `pstack/skills/*` entries:
 
