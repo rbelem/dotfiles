@@ -18,7 +18,7 @@
   // The flat plans (zai-coding-plan, alibaba-token-plan, kimi-for-coding) are
   // out of credit, so they are not a fallback. deepseek's own balance is
   // $0.68 and minimax rejects its key.
-  "preset": "free",
+  "preset": "default",
   "presets": {
     "default": {
       "orchestrator": {
