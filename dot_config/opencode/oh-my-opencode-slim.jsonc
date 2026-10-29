@@ -18,7 +18,7 @@
   // The flat plans (zai-coding-plan, alibaba-token-plan, kimi-for-coding) are
   // out of credit, so they are not a fallback. deepseek's own balance is
   // $0.68 and minimax rejects its key.
-  "preset": "default",
+  "preset": "free",
   "presets": {
     "default": {
       "orchestrator": {
@@ -86,6 +86,73 @@
           { "id": "opencode-go/glm-5.3", "variant": "max" },
           { "id": "opencode-go/muse-spark-1.3-contributor", "variant": "max" },
           { "id": "opencode-go/mimo-v2.6-flash", "variant": "default" }
+        ],
+        "variant": "max"
+      }
+    },
+    "free": {
+      "orchestrator": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "high" },
+          { "id": "opencode-go/beam-free", "variant": "high" }
+        ],
+        "variant": "high"
+      },
+      "oracle": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "max" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "max" },
+          { "id": "opencode-go/beam-free", "variant": "max" }
+        ],
+        "variant": "max"
+      },
+      "librarian": {
+        "model": [
+          { "id": "opencode-go/beam-free", "variant": "low" },
+          { "id": "opencode/glm-5.3-flash-free", "variant": "low" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" }
+        ],
+        "variant": "low"
+      },
+      "explorer": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "low" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "low" },
+          { "id": "opencode-go/beam-free", "variant": "high" },
+          { "id": "opencode/mimo-v2.6-flash-free", "variant": "default" }
+        ],
+        "variant": "low"
+      },
+      "designer": {
+        "model": [
+          { "id": "opencode/deepseek-v4.1-flash-free", "variant": "high" },
+          { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "high" }
+        ],
+        "variant": "high"
+      },
+      "fixer": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
+          { "id": "opencode/deepseek-v4.1-flash-free", "variant": "high" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "high" },
+          { "id": "opencode/flint-40b-free", "variant": "high" }
+        ],
+        "variant": "high"
+      },
+      "observer": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "high" },
+          { "id": "opencode/nemotron-3.5-super-vl-free", "variant": "high" }
+        ],
+        "variant": "high"
+      },
+      "council": {
+        "model": [
+          { "id": "opencode/glm-5.3-flash-free", "variant": "max" },
+          { "id": "opencode-go/minimax-m3.1-flash-free", "variant": "max" },
+          { "id": "opencode-go/beam-free", "variant": "max" }
         ],
         "variant": "max"
       }
@@ -189,6 +256,16 @@
         },
         "beta": {
           "model": ["opencode-go/claude-haiku-5-5"],
+          "variant": "max"
+        }
+      },
+      "free-only": {
+        "alpha": {
+          "model": ["opencode/glm-5.3-flash-free"],
+          "variant": "max"
+        },
+        "beta": {
+          "model": ["opencode-go/minimax-m3.1-flash-free"],
           "variant": "max"
         }
       }

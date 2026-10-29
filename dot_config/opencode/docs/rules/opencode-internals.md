@@ -31,7 +31,7 @@ spec — read the doc before guessing an endpoint.
 
 ## Session transcripts
 
-`~/.config/opencode/scripts/session-transcript.sh <session-id> [text|tool|all]`
+`~/.config/opencode/scripts/session-transcript.sh <session-id> [text|tool|all] [--full]`
 prints a session from the opencode database. The schema, the session-id query,
 and the raw SQL are in `docs/session-transcripts.md`.
 

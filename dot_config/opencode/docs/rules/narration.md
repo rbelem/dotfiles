@@ -28,6 +28,9 @@ Each one wastes 50-200 tokens per turn, and repeats every turn:
    same preamble before every tool.
 4. Research progress → a final summary, or one mid-stream checkpoint every ~5
    turns. Never a "Now I have the picture" preamble per turn.
+5. Fresh phase (new skill, new verification step) → one short clause naming the
+   phase, then the tool call. The ban covers repeating internal bookkeeping,
+   not telling the user what started.
 
 Track remaining work in `todowrite`, not in narration. The rule for *when* a
 todo list exists lives in the root `AGENTS.md` section **Task Tracking**; this

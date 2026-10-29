@@ -21,8 +21,9 @@ over this file.
   `poll-guard` rejects `sleep` ≥ 30 s (`POLL_GUARD_BYPASS=1` is the hatch).
 - **Scratch.** `~/.cache/opencode-scratch`, reachable as `/tmp/opencode`. `/` is
   96 G and holds `/nix`, so it fills before it looks full.
-- **No narration.** No "board clean" or "sentinel acknowledged" preamble, and no
-  restating a plan after a terse go-ahead. One clause, then tool calls.
+- **No narration.** Internal bookkeeping stays silent: no "board clean" or
+  "sentinel acknowledged" preamble, and no restating a plan after a terse
+  go-ahead. One user-facing progress clause per phase is fine, then tool calls.
 - **`todowrite` for 3+ distinct steps**, before the first step, one item
   `in_progress` at a time. The orchestrator prompt repeats this trigger on
   purpose: measured 6/6 with it against 5/9 on the file rule alone (2026-10-20).
@@ -44,7 +45,7 @@ mandatory, not background material.
 
 | Trigger | File |
 |---|---|
-| Dispatching, resuming, or cancelling a lane; weighing specialist against self | `docs/rules/delegation.md` |
+| Dispatching, resuming, or cancelling a lane; weighing specialist against self — delegate only when the lane earns back setup + hand-off | `docs/rules/delegation.md` |
 | About to explain a sentinel or board state, or restate a plan | `docs/rules/narration.md` |
 | Choosing a shell invocation, backgrounding a command, or writing to scratch | `docs/rules/shell-and-jobs.md` |
 | Editing anything under `~/.config/opencode`, or locating a skill or doc | `docs/rules/machine-map.md` |

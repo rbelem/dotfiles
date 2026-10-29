@@ -38,12 +38,14 @@ shapes so it works on either.
 ## The script
 
 ```bash
-~/.config/opencode/scripts/session-transcript.sh <session-id> [text|tool|all]
+~/.config/opencode/scripts/session-transcript.sh <session-id> [text|tool|all] [--full]
 ```
 
 It prints one line per message part: timestamp, kind, tool, output size, and
 a snippet of the input. `tool` mode is the useful one for a retrospective —
-it shows every call the agent made and how big each answer was.
+it shows every call the agent made and how big each answer was. Append
+`--full` to widen the snippet column from 160 to 2000 chars when truncation
+hides intent.
 
 ## Finding a session id
 
